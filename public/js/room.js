@@ -1,5 +1,13 @@
 // room.js - Core WebRTC mesh engine with bulletproof screen sharing, dynamic layouts, and pinning
-const socket = io();
+// Connect to Render backend when deployed on Vercel or custom domain, else fallback to current origin
+const BACKEND_URL = window.__BACKEND_URL__ || 
+  (window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1') || window.location.hostname.includes('onrender.com')
+    ? window.location.origin
+    : 'https://meet-io-aq20.onrender.com');
+
+const socket = io(BACKEND_URL, {
+  transports: ['websocket', 'polling']
+});
 
 // Extract room ID from URL /room/:roomId or /r/:roomId or ?room=xxx
 let roomId = 'default-room';

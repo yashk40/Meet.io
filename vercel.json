@@ -1,0 +1,8 @@
+{
+  "outputDirectory": "public",
+  "rewrites": [
+    { "source": "/r/:roomId", "destination": "/room.html" },
+    { "source": "/room/:roomId", "destination": "/room.html" },
+    { "source": "/api/:match*", "destination": "https://meet-io-aq20.onrender.com/api/:match*" }
+  ]
+}

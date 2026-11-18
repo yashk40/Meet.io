@@ -164,12 +164,29 @@ function extractRoomId(raw) {
 btnNewMeeting?.addEventListener('click', async () => {
   try {
     saveUserName();
-    const res = await fetch('/api/new-room');
-    const data = await res.json();
-    if (data.roomId) {
-      cleanupLobby();
-      window.location.href = `/r/${data.roomId}`;
+    const backendUrl = (window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1') || window.location.hostname.includes('onrender.com'))
+      ? ''
+      : 'https://meet-io-aq20.onrender.com';
+    let newRoomId = null;
+    try {
+      const res = await fetch(`${backendUrl}/api/new-room`);
+      if (res.ok) {
+        const data = await res.json();
+        newRoomId = data.roomId;
+      }
+    } catch (e) {
+      console.warn('API new-room fetch fallback:', e);
     }
+
+    if (!newRoomId) {
+      // Robust client-side fallback if network or proxy is down
+      const chars = 'abcdefghijklmnopqrstuvwxyz';
+      const seg = n => Array.from({ length: n }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+      newRoomId = `${seg(3)}-${seg(4)}-${seg(3)}`;
+    }
+
+    cleanupLobby();
+    window.location.href = `/r/${newRoomId}`;
   } catch (err) {
     console.error('Failed to create new room:', err);
   }

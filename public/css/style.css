@@ -1678,14 +1678,14 @@ svg.lucide, .lucide {
 
 .status-icon.muted,
 .status-icon .mic-off-icon {
-  color: #EF4444 !important;
+  color: #FF4D4D !important;
 }
 
 .status-icon.muted svg,
 .status-icon.muted i,
 .status-icon.muted .lucide,
 .status-icon .mic-off-icon {
-  stroke: #EF4444 !important;
+  stroke: #FF4D4D !important;
 }
 
 /* Screen Share Presentation Area */
@@ -1896,17 +1896,16 @@ svg.lucide, .lucide {
   bottom: max(20px, env(safe-area-inset-bottom, 20px));
   left: 50%;
   transform: translateX(-50%);
-  height: 60px;
-  background: rgba(18, 20, 26, 0.92);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: var(--radius-capsule);
-  padding: 0 14px;
+  height: auto;
+  min-height: 62px;
+  background: #141622;
+  border: 2px solid #FFFFFF;
+  border-radius: 18px;
+  padding: 8px 14px;
   display: flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55), 0 0 1px 1px rgba(255, 255, 255, 0.06);
+  box-shadow: 4px 7px 0 0 #A78BFA, 4px 7px 0 2px #000000;
   z-index: 50;
   transition: var(--transition-smooth);
 }
@@ -1917,106 +1916,214 @@ svg.lucide, .lucide {
   gap: 8px;
 }
 
+.control-group::after,
 .control-group:not(:last-child)::after {
-  content: "";
-  display: block;
-  width: 1px;
-  height: 22px;
-  background: rgba(255, 255, 255, 0.12);
-  margin: 0 4px;
+  display: none !important;
 }
 
 .control-btn {
-  width: 44px;
-  height: 44px;
-  min-width: 44px;
-  min-height: 44px;
-  border-radius: 50%;
-  border: 1px solid transparent;
-  background: rgba(255, 255, 255, 0.08);
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+  min-height: 46px;
+  border-radius: 12px;
+  background: #1E2130;
+  border: 1.5px solid #2B2F42;
+  box-shadow: 2px 2px 0 0 #000000;
   color: #FFFFFF;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   position: relative;
-  transition: var(--transition-fast);
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.15s ease,
+              border-color 0.15s ease,
+              color 0.15s ease;
   touch-action: manipulation;
+  user-select: none;
+  padding: 0;
+}
+
+.control-btn svg,
+.control-btn i,
+.control-btn svg.lucide,
+.control-btn .lucide {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2;
+  display: block;
 }
 
 .control-btn:hover {
-  background: rgba(255, 255, 255, 0.16);
+  background: #282C40;
+  border-color: #FFFFFF;
   transform: translateY(-2px);
+  box-shadow: 2px 4px 0 0 #000000;
+  color: #FFFFFF;
 }
 
 .control-btn:active {
-  transform: scale(0.92);
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 0 #000000;
 }
 
+.control-btn:focus-visible {
+  outline: 2px solid #A78BFA;
+  outline-offset: 2px;
+}
+
+/* Active / On State */
 .control-btn.active {
-  background: var(--accent-powder-blue) !important;
-  color: #FFFFFF !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
+  background: #1E293B !important;
+  border-color: #38BDF8 !important;
+  color: #38BDF8 !important;
 }
 
-/* Off/Muted State */
+.control-btn.active svg,
+.control-btn.active i,
+.control-btn.active .lucide {
+  stroke: #38BDF8 !important;
+}
+
+.control-btn.active:hover {
+  background: #25334A !important;
+  border-color: #60A5FA !important;
+}
+
+/* Off / Muted State */
 .control-btn.active-off {
-  background: rgba(239, 68, 68, 0.2) !important;
-  border-color: rgba(239, 68, 68, 0.5) !important;
-  color: #F87171 !important;
+  background: #3B1C22 !important;
+  border-color: #FF4D4D !important;
+  color: #FF4D4D !important;
+  stroke: #FF4D4D !important;
+}
+
+.control-btn.active-off svg,
+.control-btn.active-off i,
+.control-btn.active-off .lucide {
+  stroke: #FF4D4D !important;
+  color: #FF4D4D !important;
+}
+
+.control-btn.active-off:hover {
+  background: #4A222B !important;
+  border-color: #FF6666 !important;
+  color: #FF6666 !important;
 }
 
 /* Hand Raised State */
 .control-btn.active-warning {
-  background: rgba(245, 158, 11, 0.24) !important;
-  border-color: rgba(245, 158, 11, 0.6) !important;
+  background: #3B2E14 !important;
+  border-color: #F59E0B !important;
   color: #FBBF24 !important;
 }
 
-/* Screen Sharing Active State */
+.control-btn.active-warning svg,
+.control-btn.active-warning i,
+.control-btn.active-warning .lucide {
+  stroke: #FBBF24 !important;
+}
+
+.control-btn.active-warning:hover {
+  background: #4A3A19 !important;
+  border-color: #FBBF24 !important;
+}
+
+/* Screen Sharing Active & Highlight State */
+.control-btn.highlight-btn,
 .control-btn.sharing-active {
-  background: rgba(59, 130, 246, 0.25) !important;
-  border-color: rgba(59, 130, 246, 0.6) !important;
+  background: #1B2C4E !important;
+  border-color: #60A5FA !important;
   color: #93C5FD !important;
+}
+
+.control-btn.highlight-btn svg,
+.control-btn.highlight-btn i,
+.control-btn.highlight-btn .lucide,
+.control-btn.sharing-active svg,
+.control-btn.sharing-active i,
+.control-btn.sharing-active .lucide {
+  stroke: #93C5FD !important;
+}
+
+.control-btn.highlight-btn:hover,
+.control-btn.sharing-active:hover {
+  background: #233963 !important;
+  border-color: #93C5FD !important;
+  color: #BFDBFE !important;
 }
 
 /* Leave Call Danger Button */
 .control-btn.btn-danger {
-  background: #EF4444 !important;
+  width: 46px !important;
+  height: 46px !important;
+  min-width: 46px !important;
+  min-height: 46px !important;
+  border-radius: 12px !important;
+  background: #FF4D4D !important;
+  border: 2px solid #000000 !important;
+  box-shadow: 2px 2px 0 0 #000000 !important;
   color: #FFFFFF !important;
-  width: 52px;
-  border-radius: var(--radius-capsule);
   margin-left: 2px;
-  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+}
+
+.control-btn.btn-danger svg,
+.control-btn.btn-danger i,
+.control-btn.btn-danger .lucide {
+  stroke: #FFFFFF !important;
+  color: #FFFFFF !important;
 }
 
 .control-btn.btn-danger:hover {
-  background: #DC2626 !important;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(239, 68, 68, 0.5);
+  background: #FF3333 !important;
+  border-color: #000000 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 2px 4px 0 0 #000000 !important;
+  color: #FFFFFF !important;
+}
+
+.control-btn.btn-danger:active {
+  transform: translate(1px, 1px) !important;
+  box-shadow: 1px 1px 0 0 #000000 !important;
 }
 
 /* Count & Unread Badges */
 .badge-count {
   position: absolute;
-  top: -3px;
-  right: -3px;
-  background: var(--accent-powder-blue);
-  color: #FFFFFF;
-  font-size: 0.68rem;
-  font-weight: 700;
+  top: -4px;
+  right: -4px;
   min-width: 18px;
   height: 18px;
   padding: 0 4px;
-  border-radius: 9999px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid var(--stage-bg);
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1;
+  pointer-events: none;
+  z-index: 2;
+  box-sizing: border-box;
 }
 
+#footerPeopleBadge,
+#footerPeopleBadge.badge-count {
+  background: #D4FF00 !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  font-weight: 800 !important;
+}
+
+#chatUnreadBadge,
 #chatUnreadBadge.badge-count {
-  background: var(--apple-red);
+  background: #FF4D4D !important;
+  color: #FFFFFF !important;
+  border: 2px solid #000000 !important;
+  font-weight: 800 !important;
 }
 
 /* ==========================================================================
@@ -2028,20 +2135,19 @@ svg.lucide, .lucide {
 
 .reaction-picker {
   position: absolute;
-  bottom: 56px;
+  bottom: 58px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(22, 24, 32, 0.95);
-  -webkit-backdrop-filter: blur(24px);
-  backdrop-filter: blur(24px);
-  border: 1px solid var(--border-highlight);
-  border-radius: var(--radius-capsule);
-  padding: 6px 10px;
+  background: #141622;
+  border: 2px solid #FFFFFF;
+  border-radius: 14px;
+  box-shadow: 4px 6px 0 0 #A78BFA, 4px 6px 0 2px #000000;
+  padding: 8px 12px;
   display: flex;
+  align-items: center;
   gap: 8px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
   z-index: 100;
-  animation: popIn 0.2s var(--spring-ease);
+  animation: popIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes popIn {
@@ -2051,19 +2157,29 @@ svg.lucide, .lucide {
 
 .reaction-opt {
   background: transparent;
-  border: none;
-  font-size: 1.25rem;
+  border: 1.5px solid transparent;
+  font-size: 1.3rem;
   cursor: pointer;
-  padding: 4px;
-  border-radius: 50%;
-  transition: transform 0.15s ease;
+  padding: 4px 6px;
+  border-radius: 8px;
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.15s ease,
+              border-color 0.15s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  line-height: 1;
+  user-select: none;
 }
 
 .reaction-opt:hover {
-  transform: scale(1.3);
+  transform: scale(1.25);
+  background: #1E2130;
+  border-color: #2B2F42;
+}
+
+.reaction-opt:active {
+  transform: scale(1.1);
 }
 
 .reaction-overlay {
@@ -2775,12 +2891,15 @@ svg.lucide, .lucide {
   /* Mobile Floating Control Island (Clean, Uncongested UX) */
   .room-footer {
     bottom: max(12px, env(safe-area-inset-bottom, 12px));
-    height: 54px;
+    height: auto;
+    min-height: 54px;
     max-width: calc(100vw - 16px);
-    padding: 0 10px;
-    gap: 8px;
-    background: rgba(18, 20, 26, 0.94);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+    padding: 6px 10px;
+    gap: 6px;
+    background: #141622;
+    border: 2px solid #FFFFFF;
+    border-radius: 16px;
+    box-shadow: 3px 5px 0 0 #A78BFA, 3px 5px 0 2px #000000;
   }
 
   /* Remove congested vertical dividers on mobile */
@@ -2789,7 +2908,7 @@ svg.lucide, .lucide {
   }
 
   .control-group {
-    gap: 8px;
+    gap: 6px;
   }
 
   /* Hide redundant bottom people button on mobile since it is already in the top header */
@@ -2802,17 +2921,23 @@ svg.lucide, .lucide {
     height: 40px;
     min-width: 40px;
     min-height: 40px;
+    border-radius: 10px;
   }
 
-  .control-btn svg.lucide {
-    width: 19px;
-    height: 19px;
+  .control-btn svg.lucide,
+  .control-btn svg,
+  .control-btn i {
+    width: 18px;
+    height: 18px;
   }
 
   .control-btn.btn-danger {
-    width: 48px;
-    height: 40px;
-    margin-left: 4px;
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    border-radius: 10px !important;
+    margin-left: 2px;
   }
 
   /* Mobile Sheet Presentation for Drawers */
@@ -2854,30 +2979,38 @@ svg.lucide, .lucide {
 /* Extra Compact Screens (iPhone SE / 360px phones) */
 @media (max-width: 380px) {
   .room-footer {
-    height: 50px;
-    padding: 0 6px;
-    gap: 5px;
+    height: auto;
+    min-height: 48px;
+    padding: 5px 6px;
+    gap: 4px;
+    box-shadow: 2px 4px 0 0 #A78BFA, 2px 4px 0 1.5px #000000;
   }
 
   .control-group {
-    gap: 5px;
+    gap: 4px;
   }
 
   .control-btn {
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-    min-height: 36px;
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    min-height: 34px;
+    border-radius: 8px;
   }
 
-  .control-btn svg.lucide {
-    width: 17px;
-    height: 17px;
+  .control-btn svg.lucide,
+  .control-btn svg,
+  .control-btn i {
+    width: 16px;
+    height: 16px;
   }
 
   .control-btn.btn-danger {
-    width: 44px;
-    height: 36px;
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    min-height: 34px !important;
+    border-radius: 8px !important;
     margin-left: 2px;
   }
 }
@@ -2916,24 +3049,6 @@ svg.lucide, .lucide {
 }
 
 
-.room-footer {
-  background: rgba(25, 28, 37, 0.96);
-  border-color: rgba(255, 255, 255, 0.1);
-  gap: 8px;
-}
-
-.control-group {
-  gap: 7px;
-}
-
-.control-btn {
-  background: rgba(255, 255, 255, 0.075);
-}
-
-.control-btn:hover {
-  background: rgba(255, 255, 255, 0.14);
-}
-
 .room-body :where(button, input):focus-visible {
   outline: 3px solid #93c5fd;
   outline-offset: 3px;
@@ -2941,8 +3056,6 @@ svg.lucide, .lucide {
 
 @media (max-width: 768px) {
   .video-grid { gap: 10px; }
-  .room-footer { gap: 5px; }
-  .control-group { gap: 5px; }
 }
 
 /* Keep the meeting header aligned at every window width */

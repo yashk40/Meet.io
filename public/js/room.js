@@ -143,7 +143,9 @@ const chkPipSelf = document.getElementById('chkPipSelf');
 const toastContainer = document.getElementById('toastContainer');
 
 // Initialize Room UI
-if (displayRoomId) displayRoomId.textContent = roomId;
+if (displayRoomId) displayRoomId.textContent = 'Copy Code';
+const roomPill = document.getElementById('roomPill') || document.querySelector('.room-pill');
+if (roomPill) roomPill.title = `Meeting Code: ${roomId} • Click to copy link`;
 if (footerRoomCode) footerRoomCode.textContent = roomId;
 if (localNameTag) localNameTag.textContent = `${userName} (You)`;
 if (localInitial) localInitial.textContent = userName ? userName[0].toUpperCase() : 'Y';
@@ -186,15 +188,38 @@ function showToast(message) {
 }
 
 // Copy Invite link (Short & Clean URL)
+let copyFeedbackTimeout = null;
 function copyMeetingLink() {
   const shortUrl = `${window.location.origin}/r/${roomId}`;
   navigator.clipboard.writeText(shortUrl).then(() => {
     showToast('Meeting link copied: ' + shortUrl);
+    if (displayRoomId) {
+      displayRoomId.textContent = 'Copied!';
+      const pillIcon = document.getElementById('pillCopyIcon');
+      if (pillIcon) {
+        pillIcon.setAttribute('data-lucide', 'check');
+        if (window.lucide) window.lucide.createIcons();
+      }
+      clearTimeout(copyFeedbackTimeout);
+      copyFeedbackTimeout = setTimeout(() => {
+        if (displayRoomId) displayRoomId.textContent = 'Copy Code';
+        if (pillIcon) {
+          pillIcon.setAttribute('data-lucide', 'copy');
+          if (window.lucide) window.lucide.createIcons();
+        }
+      }, 2000);
+    }
   }).catch(() => {
     prompt('Copy this meeting link:', shortUrl);
   });
 }
-btnCopyInvite?.addEventListener('click', copyMeetingLink);
+roomPill?.addEventListener('click', copyMeetingLink);
+roomPill?.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    copyMeetingLink();
+  }
+});
 btnDrawerCopyLink?.addEventListener('click', copyMeetingLink);
 
 // ==========================================

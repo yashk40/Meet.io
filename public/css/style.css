@@ -1207,8 +1207,11 @@ svg.lucide, .lucide {
   color: #FFFFFF !important;
   font-weight: 700 !important;
   font-size: 0.85rem !important;
+  cursor: pointer !important;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   user-select: none;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
 }
 
 .room-pill:hover {
@@ -1243,6 +1246,8 @@ svg.lucide, .lucide {
   color: #FFFFFF !important;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.025em;
+  white-space: nowrap !important;
+  user-select: none;
 }
 
 .btn-copy-chip {
@@ -3114,12 +3119,16 @@ svg.lucide, .lucide {
     min-height: unset !important;
     border: 2px solid #FFFFFF !important;
     box-shadow: 0 4px 0 0 #A78BFA, 0 4px 0 1.5px #000000 !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
   }
 
   .room-code,
   #displayRoomId {
     font-size: 0.78rem !important;
-    max-width: clamp(65px, 20vw, 130px) !important;
+    white-space: nowrap !important;
+    max-width: none !important;
+    overflow: visible !important;
   }
 
   .btn-copy-chip {

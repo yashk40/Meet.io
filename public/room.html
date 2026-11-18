@@ -36,12 +36,12 @@
   <!-- Minimal Header Bar -->
   <header class="room-header">
     <div class="header-left">
-      <div class="room-pill">
+      <div class="room-pill" id="roomPill" role="button" tabindex="0" title="Click to copy meeting link" aria-label="Copy meeting link">
         <span class="live-pulse"></span>
-        <span id="displayRoomId" class="room-code">loading...</span>
-        <button id="btnCopyInvite" class="btn-copy-chip" title="Copy meeting link" aria-label="Copy meeting link">
-          <i data-lucide="copy"></i>
-        </button>
+        <span id="displayRoomId" class="room-code">Copy Code</span>
+        <span class="btn-copy-chip">
+          <i data-lucide="copy" id="pillCopyIcon"></i>
+        </span>
       </div>
 
       <!-- Hidden compatibility elements for state management -->

@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "public": false,
+  "rewrites": [
+    { "source": "/r/:roomId", "destination": "/room.html" },
+    { "source": "/room/:roomId", "destination": "/room.html" },
+    { "source": "/", "destination": "/index.html" }
+  ]
+}

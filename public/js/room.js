@@ -490,6 +490,7 @@ function applyLayoutClasses() {
 // ==========================================
 // 2. CLOUDFLARE CALLS (SFU) & LOCAL MEDIA SETUP
 // ==========================================
+const CALLS_API_BASE = window.CF_WORKER_URL || localStorage.getItem('CF_WORKER_URL') || '';
 let isSfuActive = false;
 let cfClient = null;
 
@@ -503,7 +504,7 @@ class CloudflareCallsClient {
 
   async initSession() {
     try {
-      const res = await fetch('/api/calls/sessions/new', { method: 'POST' });
+      const res = await fetch(`${CALLS_API_BASE}/api/calls/sessions/new`, { method: 'POST' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       if (data.sessionId) {
@@ -539,7 +540,7 @@ class CloudflareCallsClient {
       const offer = await this.publishPc.createOffer();
       await this.publishPc.setLocalDescription(offer);
 
-      const res = await fetch(`/api/calls/sessions/${this.sessionId}/tracks/new`, {
+      const res = await fetch(`${CALLS_API_BASE}/api/calls/sessions/${this.sessionId}/tracks/new`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -641,7 +642,7 @@ class CloudflareCallsClient {
             { location: 'remote', sessionId: remoteUser.callsSessionId, trackName: 'video' }
           ];
 
-      const res = await fetch(`/api/calls/sessions/${this.sessionId}/tracks/new`, {
+      const res = await fetch(`${CALLS_API_BASE}/api/calls/sessions/${this.sessionId}/tracks/new`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -705,7 +706,7 @@ async function initLocalMedia() {
 
     // Check Cloudflare Calls SFU availability
     try {
-      const configRes = await fetch('/api/calls/config').catch(() => null);
+      const configRes = await fetch(`${CALLS_API_BASE}/api/calls/config`).catch(() => null);
       if (configRes && configRes.ok) {
         const config = await configRes.json();
         if (config.sfuEnabled) {

@@ -1150,7 +1150,7 @@ svg.lucide, .lucide {
 }
 
 /* ==========================================================================
-   2. MEETING ROOM VIEW (Minimal Studio Dark & Lucide Icons)
+   2. MEETING ROOM VIEW (Neo-Brutalist Dark Studio)
    ========================================================================== */
 .room-body {
   height: 100vh;
@@ -1158,58 +1158,77 @@ svg.lucide, .lucide {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: var(--stage-bg);
-  color: var(--text-dark-primary);
+  background: #0D0E15 !important;
+  background-color: #0D0E15 !important;
+  color: #FFFFFF !important;
   position: relative;
 }
 
-/* Minimal Header Bar */
+/* Neo-Brutalist Top Header Bar */
 .room-header {
-  height: 56px;
-  padding: 0 1.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  height: auto !important;
+  min-height: unset !important;
+  padding: 14px 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
   flex-shrink: 0;
-  background: rgba(12, 13, 18, 0.85);
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border-subtle);
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border: none !important;
+  border-bottom: none !important;
   z-index: 30;
 }
 
 .header-left, .header-right {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
-.room-pill {
-  display: inline-flex;
+.header-center {
+  display: flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.06);
-  padding: 4px 10px 4px 12px;
-  border-radius: var(--radius-capsule);
-  font-size: 0.84rem;
-  font-weight: 600;
-  color: #FFFFFF;
-  border: 1px solid var(--border-subtle);
-  transition: var(--transition-fast);
+  justify-content: center;
+}
+
+/* Neo-Brutalist Room Code Pill */
+.room-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: #000000 !important;
+  border: 2px solid #FFFFFF !important;
+  border-radius: 12px !important;
+  box-shadow: 0 5px 0 0 #A78BFA, 0 5px 0 2px #000000 !important;
+  padding: 6px 14px !important;
+  min-height: 38px;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  user-select: none;
 }
 
 .room-pill:hover {
-  background: rgba(255, 255, 255, 0.09);
-  border-color: var(--border-highlight);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 0 0 #A78BFA, 0 6px 0 2px #000000 !important;
+}
+
+.room-pill:active {
+  transform: translateY(2px);
+  box-shadow: 0 3px 0 0 #A78BFA, 0 3px 0 2px #000000 !important;
 }
 
 .live-pulse {
-  width: 7px;
-  height: 7px;
-  background: var(--apple-green);
-  border-radius: 50%;
-  box-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
+  width: 8px !important;
+  height: 8px !important;
+  background: #10B981 !important;
+  border-radius: 50% !important;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.8) !important;
   animation: pulseDot 2s infinite;
+  flex-shrink: 0;
 }
 
 @keyframes pulseDot {
@@ -1218,77 +1237,176 @@ svg.lucide, .lucide {
   100% { transform: scale(0.95); opacity: 0.85; }
 }
 
+#displayRoomId,
+.room-code {
+  font-weight: 700 !important;
+  color: #FFFFFF !important;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.025em;
+}
+
 .btn-copy-chip {
-  background: transparent;
-  border: none;
-  color: var(--text-dark-secondary);
+  background: transparent !important;
+  border: none !important;
+  color: #FFFFFF !important;
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 3px;
+  padding: 3px 4px;
   border-radius: 6px;
   transition: var(--transition-fast);
 }
 
 .btn-copy-chip:hover {
-  color: #FFFFFF;
-  background: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF !important;
+  background: rgba(255, 255, 255, 0.15) !important;
 }
 
+.btn-copy-chip svg,
+.btn-copy-chip i,
+.btn-copy-chip .lucide {
+  stroke: #FFFFFF !important;
+  width: 15px;
+  height: 15px;
+}
+
+/* Neo-Brutalist Timer Chip */
 .timer-chip {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--border-subtle);
-  padding: 4px 14px;
-  border-radius: var(--radius-capsule);
-  font-size: 0.84rem;
-  font-weight: 600;
-  color: var(--text-dark-secondary);
-  font-variant-numeric: tabular-nums;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #000000 !important;
+  border: 2px solid #FFFFFF !important;
+  border-radius: 12px !important;
+  box-shadow: 0 5px 0 0 #A78BFA, 0 5px 0 2px #000000 !important;
+  padding: 6px 16px !important;
+  min-height: 38px;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  font-variant-numeric: tabular-nums !important;
   letter-spacing: 0.04em;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  user-select: none;
 }
 
+.timer-chip:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 0 0 #A78BFA, 0 6px 0 2px #000000 !important;
+}
+
+#callTimer {
+  font-weight: 700 !important;
+  color: #FFFFFF !important;
+}
+
+/* Base Header Action Button */
 .btn-header-action {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--text-dark-secondary);
-  border: 1px solid var(--border-subtle);
-  padding: 6px 12px;
-  border-radius: var(--radius-capsule);
-  font-size: 0.82rem;
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 6px 14px !important;
+  min-height: 38px;
   cursor: pointer;
-  transition: var(--transition-fast);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  user-select: none;
 }
 
-.btn-header-action:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: #FFFFFF;
-  border-color: var(--border-highlight);
+/* Neo-Brutalist Layout Button */
+#btnLayoutMenu {
+  background: #D4FF00 !important;
+  border: 2px solid #000000 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 5px 0 0 #A78BFA, 0 5px 0 2px #000000 !important;
+  color: #000000 !important;
+  font-weight: 800 !important;
+  font-size: 0.85rem !important;
 }
 
+#btnLayoutMenu svg,
+#btnLayoutMenu i,
+#btnLayoutMenu .lucide {
+  stroke: #000000 !important;
+  width: 18px;
+  height: 18px;
+}
+
+#btnLayoutMenu:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 0 0 #A78BFA, 0 6px 0 2px #000000 !important;
+  background: #e2ff33 !important;
+}
+
+#btnLayoutMenu:active {
+  transform: translateY(2px);
+  box-shadow: 0 3px 0 0 #A78BFA, 0 3px 0 2px #000000 !important;
+}
+
+/* Neo-Brutalist Header People Button (Mobile) */
+#btnHeaderPeople {
+  background: #000000 !important;
+  border: 2px solid #FFFFFF !important;
+  border-radius: 12px !important;
+  box-shadow: 0 5px 0 0 #A78BFA, 0 5px 0 2px #000000 !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+}
+
+#btnHeaderPeople svg,
+#btnHeaderPeople i,
+#btnHeaderPeople .lucide {
+  stroke: #FFFFFF !important;
+  width: 18px;
+  height: 18px;
+}
+
+#btnHeaderPeople:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 0 0 #A78BFA, 0 6px 0 2px #000000 !important;
+}
+
+#btnHeaderPeople:active {
+  transform: translateY(2px);
+  box-shadow: 0 3px 0 0 #A78BFA, 0 3px 0 2px #000000 !important;
+}
+
+#headerParticipantCount {
+  font-weight: 700 !important;
+  color: #FFFFFF !important;
+}
+
+/* Pinned Banner Indicator */
 .pinned-chip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(59, 130, 246, 0.15);
-  border: 1px solid rgba(59, 130, 246, 0.35);
-  color: #93C5FD;
+  background: #000000;
+  border: 2px solid #A78BFA;
+  box-shadow: 0 4px 0 0 #A78BFA, 0 4px 0 1.5px #000000;
+  color: #FFFFFF;
   padding: 4px 10px;
-  border-radius: var(--radius-capsule);
+  border-radius: 10px;
   font-size: 0.78rem;
-  font-weight: 600;
+  font-weight: 700;
+}
+
+.pinned-chip .chip-icon,
+.pinned-chip svg,
+.pinned-chip .lucide {
+  stroke: #A78BFA;
+  width: 14px;
+  height: 14px;
 }
 
 .btn-chip-action {
   background: transparent;
   border: none;
-  color: #93C5FD;
+  color: #A78BFA;
   text-decoration: underline;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.76rem;
   margin-left: 2px;
 }

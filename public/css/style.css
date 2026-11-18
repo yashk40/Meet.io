@@ -2941,10 +2941,51 @@ svg.lucide, .lucide {
 }
 
 /* ==========================================================================
-   7. MOBILE & TABLET RESPONSIVENESS (Apple HIG Compliant)
+   7. MOBILE & TABLET RESPONSIVENESS (Apple HIG Compliant & Neo-Brutalist)
    ========================================================================== */
 .hide-desktop {
   display: none !important;
+}
+
+/* Tablet Responsiveness */
+@media (max-width: 1024px) {
+  /* Tablet Header */
+  .room-header {
+    padding: 12px 16px !important;
+  }
+
+  /* Tablet Stage & Video Tiles */
+  .room-main {
+    padding: 10px 14px 84px 14px !important;
+  }
+
+  .video-grid {
+    gap: 12px !important;
+  }
+
+  .video-tile {
+    border: 2px solid #FFFFFF !important;
+    border-radius: 18px !important;
+    box-shadow: 6px 8px 0 0 #A78BFA, 6px 8px 0 2px #000000 !important;
+  }
+
+  .video-tile.speaking,
+  .video-tile.speaking.is-pinned,
+  .video-tile.is-pinned.speaking {
+    box-shadow: 6px 8px 0 0 #D4FF00, 6px 8px 0 2px #000000 !important;
+    border-color: #D4FF00 !important;
+  }
+
+  .video-tile.is-pinned {
+    box-shadow: 6px 8px 0 0 #A78BFA, 6px 8px 0 2px #000000 !important;
+    border-color: #A78BFA !important;
+  }
+
+  /* Tablet Side Drawers */
+  .side-drawer {
+    width: 330px !important;
+    max-width: calc(100vw - 24px) !important;
+  }
 }
 
 @media (max-width: 768px) {
@@ -3033,17 +3074,85 @@ svg.lucide, .lucide {
     padding: 1rem;
   }
 
-  /* Room View Responsiveness */
+  /* Neo-Brutalist Mobile Header */
   .room-header {
-    height: 52px;
-    padding: 0 12px;
+    height: auto !important;
+    min-height: unset !important;
+    padding: 10px 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
   }
 
+  .header-left,
+  .header-right {
+    gap: 8px !important;
+  }
+
+  .room-pill,
+  .timer-chip {
+    padding: 4px 10px !important;
+    font-size: 0.78rem !important;
+    min-height: unset !important;
+    border: 2px solid #FFFFFF !important;
+    box-shadow: 0 4px 0 0 #A78BFA, 0 4px 0 1.5px #000000 !important;
+  }
+
+  .room-code,
+  #displayRoomId {
+    font-size: 0.78rem !important;
+    max-width: clamp(65px, 20vw, 130px) !important;
+  }
+
+  .btn-copy-chip {
+    padding: 2px 3px !important;
+  }
+
+  .btn-copy-chip svg,
+  .btn-copy-chip i,
+  .btn-copy-chip .lucide {
+    width: 14px !important;
+    height: 14px !important;
+  }
+
+  #btnLayoutMenu {
+    padding: 5px 10px !important;
+    font-size: 0.78rem !important;
+    min-height: unset !important;
+    border: 2px solid #000000 !important;
+    box-shadow: 0 4px 0 0 #A78BFA, 0 4px 0 1.5px #000000 !important;
+  }
+
+  #btnHeaderPeople {
+    display: inline-flex !important;
+    padding: 5px 10px !important;
+    font-size: 0.78rem !important;
+    min-height: unset !important;
+    border: 2px solid #FFFFFF !important;
+    box-shadow: 0 4px 0 0 #A78BFA, 0 4px 0 1.5px #000000 !important;
+  }
+
+  #btnLayoutMenu svg,
+  #btnLayoutMenu i,
+  #btnLayoutMenu .lucide,
+  #btnHeaderPeople svg,
+  #btnHeaderPeople i,
+  #btnHeaderPeople .lucide {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  /* Neo-Brutalist Mobile Stage & Video Tiles */
   .room-main {
-    padding: 0.35rem 0.4rem 4.8rem 0.4rem;
+    padding: 8px 10px 76px 10px !important;
+    gap: 8px !important;
   }
 
-  /* Video Grid Portrait Auto-Stacking */
+  .video-grid {
+    gap: 10px !important;
+  }
+
   .video-grid.grid-1 {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
@@ -3059,7 +3168,63 @@ svg.lucide, .lucide {
     grid-template-rows: 1fr 1fr;
   }
 
-  /* When Sharing Active on Mobile */
+  .video-tile {
+    border: 2px solid #FFFFFF !important;
+    border-radius: 16px !important;
+    box-shadow: 4px 6px 0 0 #A78BFA, 4px 6px 0 2px #000000 !important;
+  }
+
+  .video-tile.speaking,
+  .video-tile.speaking.is-pinned,
+  .video-tile.is-pinned.speaking {
+    box-shadow: 4px 6px 0 0 #D4FF00, 4px 6px 0 2px #000000 !important;
+    border-color: #D4FF00 !important;
+  }
+
+  .video-tile.is-pinned {
+    box-shadow: 4px 6px 0 0 #A78BFA, 4px 6px 0 2px #000000 !important;
+    border-color: #A78BFA !important;
+  }
+
+  .tile-bottom-bar {
+    bottom: 10px !important;
+    left: 10px !important;
+    padding: 4px 8px !important;
+    font-size: 0.74rem !important;
+    border-radius: 8px !important;
+    gap: 6px !important;
+  }
+
+  .participant-name {
+    font-size: 0.74rem !important;
+  }
+
+  .tile-actions {
+    top: 8px !important;
+    right: 8px !important;
+  }
+
+  .btn-tile-pin {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 6px !important;
+  }
+
+  .btn-tile-pin svg,
+  .btn-tile-pin i,
+  .btn-tile-pin .lucide {
+    width: 13px !important;
+    height: 13px !important;
+  }
+
+  .video-tile .avatar-fallback span {
+    width: 56px !important;
+    height: 56px !important;
+    font-size: 1.6rem !important;
+    border-width: 2.5px !important;
+  }
+
+  /* Neo-Brutalist Screen Share Thumbnails Strip on Mobile */
   .stage-container.sharing-active {
     display: flex;
     flex-direction: column;
@@ -3089,25 +3254,27 @@ svg.lucide, .lucide {
     width: 76px !important;
     height: 50px !important;
     min-width: 76px !important;
-    border-radius: 10px;
+    border: 1.5px solid #FFFFFF !important;
+    border-radius: 10px !important;
+    box-shadow: 2px 3px 0 0 #A78BFA, 2px 3px 0 1px #000000 !important;
   }
 
   .stage-container.sharing-active .video-grid.mobile-thumbnails-hidden {
     display: none !important;
   }
 
-  /* Mobile Floating Control Island (Clean, Uncongested UX) */
+  /* Neo-Brutalist Mobile Floating Control Island */
   .room-footer {
-    bottom: max(12px, env(safe-area-inset-bottom, 12px));
-    height: auto;
-    min-height: 54px;
-    max-width: calc(100vw - 16px);
-    padding: 6px 10px;
-    gap: 6px;
-    background: #141622;
-    border: 2px solid #FFFFFF;
-    border-radius: 16px;
-    box-shadow: 3px 5px 0 0 #A78BFA, 3px 5px 0 2px #000000;
+    bottom: max(12px, env(safe-area-inset-bottom, 12px)) !important;
+    height: auto !important;
+    min-height: unset !important;
+    max-width: calc(100vw - 16px) !important;
+    padding: 6px 10px !important;
+    gap: 6px !important;
+    background: #141622 !important;
+    border: 2px solid #FFFFFF !important;
+    border-radius: 16px !important;
+    box-shadow: 3px 5px 0 0 #A78BFA, 3px 5px 0 2px #000000 !important;
   }
 
   /* Remove congested vertical dividers on mobile */
@@ -3116,7 +3283,7 @@ svg.lucide, .lucide {
   }
 
   .control-group {
-    gap: 6px;
+    gap: 6px !important;
   }
 
   /* Hide redundant bottom people button on mobile since it is already in the top header */
@@ -3125,55 +3292,69 @@ svg.lucide, .lucide {
   }
 
   .control-btn {
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
-    min-height: 40px;
-    border-radius: 10px;
-  }
-
-  .control-btn svg.lucide,
-  .control-btn svg,
-  .control-btn i {
-    width: 18px;
-    height: 18px;
-  }
-
-  .control-btn.btn-danger {
     width: 40px !important;
     height: 40px !important;
     min-width: 40px !important;
     min-height: 40px !important;
     border-radius: 10px !important;
-    margin-left: 2px;
   }
 
-  /* Mobile Sheet Presentation for Drawers */
+  .control-btn svg.lucide,
+  .control-btn svg,
+  .control-btn i {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  .control-btn.btn-danger,
+  #btnLeaveCall {
+    width: 44px !important;
+    height: 40px !important;
+    min-width: 44px !important;
+    min-height: 40px !important;
+    border-radius: 10px !important;
+    margin-left: 2px !important;
+  }
+
+  .reaction-picker {
+    bottom: 54px !important;
+    padding: 6px 8px !important;
+    gap: 6px !important;
+    border-radius: 12px !important;
+    box-shadow: 3px 5px 0 0 #A78BFA, 3px 5px 0 2px #000000 !important;
+  }
+
+  .reaction-opt {
+    font-size: 1.15rem !important;
+    padding: 3px 4px !important;
+  }
+
+  /* Neo-Brutalist Mobile Bottom Sheet for Drawers */
   .sheet-grabber {
-    display: block;
-    width: 36px;
-    height: 5px;
-    border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.3);
-    margin: 8px auto 4px auto;
+    display: block !important;
+    width: 38px !important;
+    height: 4px !important;
+    background: #FFFFFF !important;
+    border-radius: 2px !important;
+    margin: 8px auto 0 !important;
   }
 
   .side-drawer {
-    position: fixed;
-    top: auto;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 75vh;
-    height: 75dvh;
-    max-height: calc(100dvh - 54px);
-    background: #141622;
-    border: 2px solid #FFFFFF;
-    border-bottom: none;
-    border-radius: 20px 20px 0 0;
-    box-shadow: 0 -4px 0 0 #A78BFA, 0 -4px 0 2px #000000;
-    animation: slideUpSheet 0.28s var(--spring-ease);
+    position: fixed !important;
+    top: auto !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: 75vh !important;
+    height: 75dvh !important;
+    max-height: calc(100dvh - 54px) !important;
+    background: #141622 !important;
+    border: 2.5px solid #FFFFFF !important;
+    border-bottom: none !important;
+    border-radius: 20px 20px 0 0 !important;
+    box-shadow: 0 -6px 0 0 #A78BFA, 0 -6px 0 2px #000000 !important;
+    animation: slideUpSheet 0.28s var(--spring-ease) !important;
   }
 
   @keyframes slideUpSheet {
@@ -3181,47 +3362,104 @@ svg.lucide, .lucide {
     to { transform: translateY(0); }
   }
 
+  .drawer-header {
+    padding: 10px 14px !important;
+  }
+
+  .drawer-title h3 {
+    font-size: 0.92rem !important;
+  }
+
+  .chat-form {
+    padding: 10px 12px !important;
+  }
+
   .layout-options-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+  }
+
+  .modal-card {
+    width: calc(100% - 24px) !important;
+    max-width: 440px !important;
+    padding: 16px !important;
+    box-shadow: 4px 6px 0 0 #A78BFA, 4px 6px 0 2px #000000 !important;
+    border-radius: 18px !important;
   }
 }
 
-/* Extra Compact Screens (iPhone SE / 360px phones) */
+/* Extra Compact Screens (iPhone SE / 480px and below) */
+@media (max-width: 480px) {
+  .room-header {
+    padding: 8px 10px !important;
+    gap: 6px !important;
+  }
+
+  .header-left,
+  .header-right {
+    gap: 6px !important;
+  }
+
+  .room-pill,
+  .timer-chip {
+    padding: 4px 8px !important;
+    font-size: 0.74rem !important;
+  }
+
+  .room-code,
+  #displayRoomId {
+    max-width: clamp(55px, 18vw, 85px) !important;
+    font-size: 0.74rem !important;
+  }
+
+  #btnLayoutMenu,
+  #btnHeaderPeople {
+    padding: 4px 8px !important;
+    font-size: 0.74rem !important;
+  }
+
+  .room-footer {
+    max-width: calc(100vw - 12px) !important;
+    padding: 5px 8px !important;
+  }
+}
+
+/* Ultra Compact Screens (iPhone SE / 380px and below) */
 @media (max-width: 380px) {
   .room-footer {
-    height: auto;
-    min-height: 48px;
-    padding: 5px 6px;
-    gap: 4px;
-    box-shadow: 2px 4px 0 0 #A78BFA, 2px 4px 0 1.5px #000000;
+    height: auto !important;
+    min-height: 48px !important;
+    padding: 5px 6px !important;
+    gap: 4px !important;
+    box-shadow: 2px 4px 0 0 #A78BFA, 2px 4px 0 1.5px #000000 !important;
   }
 
   .control-group {
-    gap: 4px;
+    gap: 4px !important;
   }
 
   .control-btn {
-    width: 34px;
-    height: 34px;
-    min-width: 34px;
-    min-height: 34px;
-    border-radius: 8px;
-  }
-
-  .control-btn svg.lucide,
-  .control-btn svg,
-  .control-btn i {
-    width: 16px;
-    height: 16px;
-  }
-
-  .control-btn.btn-danger {
     width: 34px !important;
     height: 34px !important;
     min-width: 34px !important;
     min-height: 34px !important;
     border-radius: 8px !important;
-    margin-left: 2px;
+  }
+
+  .control-btn svg.lucide,
+  .control-btn svg,
+  .control-btn i {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  .control-btn.btn-danger,
+  #btnLeaveCall {
+    width: 38px !important;
+    height: 34px !important;
+    min-width: 38px !important;
+    min-height: 34px !important;
+    border-radius: 8px !important;
+    margin-left: 2px !important;
   }
 }
 
@@ -3232,125 +3470,8 @@ svg.lucide, .lucide {
   }
 }
 
-/* Meeting screen polish */
-.room-body {
-  background: radial-gradient(ellipse at 50% 0%, #171a24 0%, var(--stage-bg) 58%);
-}
-
-.room-header {
-  background: rgba(17, 19, 27, 0.9);
-  border-bottom-color: rgba(255, 255, 255, 0.07);
-}
-
-.room-pill,
-.timer-chip,
-.btn-header-action {
-  min-height: 38px;
-}
-
-.room-pill {
-  padding-left: 14px;
-  padding-right: 12px;
-}
-
-.btn-header-action {
-  min-width: 40px;
-  justify-content: center;
-}
-
-
+/* Accessible High-Contrast Focus Ring */
 .room-body :where(button, input):focus-visible {
-  outline: 3px solid #93c5fd;
-  outline-offset: 3px;
-}
-
-@media (max-width: 768px) {
-  .video-grid { gap: 10px; }
-}
-
-/* Keep the meeting header aligned at every window width */
-.room-header {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  gap: 16px;
-  min-height: 64px;
-  height: auto;
-  padding: 0 clamp(14px, 2.5vw, 28px);
-}
-
-.header-left,
-.header-right {
-  min-width: 0;
-  gap: 10px;
-}
-
-.header-left { justify-self: start; }
-.header-center { justify-self: center; }
-.header-right { justify-self: end; }
-
-.room-pill {
-  min-width: 0;
-  min-height: 42px;
-  gap: 9px;
-  padding: 0 12px;
-  background: rgba(255, 255, 255, 0.075);
-  border-color: rgba(255, 255, 255, 0.06);
-}
-
-.room-code {
-  display: block;
-  max-width: clamp(72px, 20vw, 190px);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.025em;
-}
-
-.btn-copy-chip {
-  flex: 0 0 28px;
-  width: 28px;
-  height: 28px;
-}
-
-.btn-copy-chip .lucide { width: 15px; height: 15px; }
-
-.timer-chip {
-  min-width: 70px;
-  min-height: 40px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 14px;
-  background: rgba(255, 255, 255, 0.075);
-  border-color: rgba(255, 255, 255, 0.06);
-  color: #e8ebf3;
-}
-
-.btn-header-action {
-  min-width: 42px;
-  min-height: 42px;
-  padding: 0 12px;
-  background: rgba(255, 255, 255, 0.075);
-  border-color: rgba(255, 255, 255, 0.06);
-}
-
-@media (max-width: 520px) {
-  .room-header {
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    gap: 8px;
-    min-height: 60px;
-    padding: 0 10px;
-  }
-
-  .header-left,
-  .header-right { gap: 6px; }
-
-  .room-pill { gap: 7px; padding: 0 9px; }
-  .room-code { max-width: clamp(58px, 19vw, 100px); font-size: 0.78rem; }
-  .live-pulse { width: 6px; height: 6px; flex: 0 0 6px; }
-  .btn-copy-chip { flex-basis: 24px; width: 24px; height: 24px; }
-  .timer-chip { min-width: 58px; min-height: 36px; padding: 0 9px; font-size: 0.76rem; }
-  .btn-header-action { min-width: 36px; min-height: 36px; padding: 0 8px; }
-  .btn-header-action .lucide { width: 17px; height: 17px; }
+  outline: 2px solid #A78BFA !important;
+  outline-offset: 2px !important;
 }

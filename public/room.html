@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
+  <title>meet.io - Meeting</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <!-- Font Awesome 6 CDN (Backup/Companion) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Lucide Icons -->
+  <script src="/js/lucide.min.js"></script>
+  <!-- Socket.IO Client -->
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body class="room-body">
+
+  <!-- Apple Floating Notification Banner for In-Call Chat Alerts -->
+  <div id="iosChatNotification" class="ios-notification-banner hidden" role="alert" aria-live="assertive">
+    <div class="ios-banner-avatar" id="iosBannerAvatar">U</div>
+    <div class="ios-banner-body">
+      <div class="ios-banner-header">
+        <span class="ios-banner-sender" id="iosBannerSender">Alex</span>
+        <span class="ios-banner-tag">• Chat</span>
+      </div>
+      <div class="ios-banner-message" id="iosBannerMessage">Message text...</div>
+    </div>
+  </div>
+
+  <!-- Minimal Header Bar -->
+  <header class="room-header">
+    <div class="header-left">
+      <div class="room-pill">
+        <span class="live-pulse"></span>
+        <span id="displayRoomId" class="room-code">loading...</span>
+        <button id="btnCopyInvite" class="btn-copy-chip" title="Copy meeting link" aria-label="Copy meeting link">
+          <i data-lucide="copy"></i>
+        </button>
+      </div>
+
+      <!-- Hidden compatibility elements for state management -->
+      <div id="screenShareBanner" class="screen-shield-badge hidden">
+        <span id="screenShareText">Screen Share Protected</span>
+      </div>
+
+      <!-- Pinned Indicator Chip -->
+      <div id="pinnedBanner" class="pinned-chip hidden">
+        <i data-lucide="pin" class="chip-icon"></i>
+        <span id="pinnedTargetName">Alex</span>
+        <button id="btnUnpinTop" class="btn-chip-action">Unpin</button>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="timer-chip">
+        <span id="callTimer">00:00</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <button id="btnLayoutMenu" class="btn-header-action" title="Change Layout">
+        <i data-lucide="layout-grid"></i>
+        <span class="hide-mobile">Layout</span>
+      </button>
+
+      <button id="btnHeaderPeople" class="btn-header-action hide-desktop" title="Participants">
+        <i data-lucide="users"></i>
+        <span id="headerParticipantCount">1</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Conference Layout -->
+  <main class="room-main" id="roomMain">
+
+    <!-- Video Grid / Stage Area -->
+    <div class="stage-container layout-auto" id="stageContainer">
+
+      <!-- Screen Share Presentation Area -->
+      <div id="presentationArea" class="presentation-area hidden">
+        <div class="presentation-top-bar">
+          <div class="presenter-badge">
+            <span class="pulse-indicator"></span>
+            <span id="presenterNameTag">Alex is presenting</span>
+          </div>
+          <div class="presentation-actions">
+            <button id="btnToggleSpeaker" class="btn-stage-pill speaker-active" title="Toggle Loudspeaker / Earpiece"
+              aria-label="Toggle Loudspeaker">
+              <i data-lucide="volume-2"></i>
+              <span class="hide-mobile">Speaker</span>
+            </button>
+            <button id="btnToggleThumbnails" class="btn-stage-pill hide-desktop" title="Toggle Faces Rail"
+              aria-label="Toggle Faces">
+              <i data-lucide="users"></i>
+            </button>
+            <button id="btnPresentationPin" class="btn-stage-pill hide-mobile" title="Pin Presentation"
+              aria-label="Pin presentation">
+              <i data-lucide="pin"></i>
+            </button>
+            <button id="btnPresentationFullscreen" class="btn-stage-pill btn-fullscreen-cta" title="Toggle Fullscreen"
+              aria-label="Enter Fullscreen Presentation">
+              <i data-lucide="maximize-2"></i>
+              <span class="hide-mobile">Fullscreen</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="presentation-video-box">
+          <div id="mirrorWarning" class="mirror-warning-banner hidden">
+            <span>💡 You are sharing your screen. Switch to another app or tab to present without mirror effect.</span>
+          </div>
+          <video id="presentationVideo" autoplay playsinline webkit-playsinline muted></video>
+
+          <!-- Floating Exit Fullscreen Button -->
+          <button id="btnExitFullscreen" class="btn-exit-fullscreen hidden" aria-label="Exit Fullscreen">
+            <i data-lucide="minimize-2"></i>
+            <span>Exit Fullscreen</span>
+          </button>
+
+          <!-- Mobile Tap-to-Play fallback buttons -->
+          <button id="btnTapToPlayScreen" class="btn-tap-to-play hidden" aria-label="Tap to view presentation">
+            <i data-lucide="play"></i> Tap to view presentation
+          </button>
+          <button id="btnTapToPlayAudio" class="btn-tap-to-play hidden"
+            style="top: calc(50% + 55px); background: rgba(30, 41, 59, 0.92); border: 1px solid rgba(255,255,255,0.2);"
+            aria-label="Tap to enable sound">
+            <i data-lucide="volume-2"></i> Tap to enable sound
+          </button>
+        </div>
+      </div>
+
+      <!-- Participant Tiles Grid -->
+      <div id="videoGrid" class="video-grid grid-1">
+
+        <!-- Local User Tile -->
+        <div id="localTile" class="video-tile local-tile" data-socket-id="local">
+          <video id="localVideo" autoplay playsinline webkit-playsinline muted></video>
+          <div id="localAvatar" class="avatar-fallback hidden">
+            <span id="localInitial">Y</span>
+          </div>
+
+          <!-- Hover Action Pin Button -->
+          <div class="tile-actions">
+            <button class="btn-tile-pin" title="Pin to stage" aria-label="Pin user" onclick="togglePinTile('local')">
+              <i data-lucide="pin"></i>
+            </button>
+          </div>
+
+          <div class="tile-bottom-bar">
+            <span class="participant-name" id="localNameTag">You</span>
+            <div class="tile-status">
+              <span id="localHandBadge" class="status-icon hand-active hidden" aria-label="Hand raised">
+                <i data-lucide="hand"></i>
+              </span>
+              <span id="localMicBadge" class="status-icon" aria-label="Microphone active">
+                <i data-lucide="mic" class="mic-on-icon"></i>
+                <i data-lucide="mic-off" class="mic-off-icon hidden"></i>
+              </span>
+            </div>
+          </div>
+
+          <!-- Self Screen Share PIP Monitor -->
+          <div id="selfScreenPip" class="self-screen-pip hidden">
+            <video id="pipVideo" autoplay playsinline webkit-playsinline muted></video>
+            <div class="pip-overlay">
+              <span>You're sharing</span>
+              <button id="btnTogglePipSize" class="pip-size-btn" title="Toggle PIP size"
+                aria-label="Toggle Picture-in-Picture size">
+                <i data-lucide="maximize-2"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Remote tiles will be inserted dynamically here -->
+      </div>
+    </div>
+
+    <!-- Floating Reactions Animation Canvas Container -->
+    <div id="reactionOverlay" class="reaction-overlay" aria-hidden="true"></div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container" role="status" aria-live="polite"></div>
+
+    <!-- Side Drawers (Chat & People) -->
+    <aside id="chatDrawer" class="side-drawer hidden" aria-label="In-Call Chat">
+      <div class="sheet-grabber"></div>
+      <div class="drawer-header">
+        <div class="drawer-title">
+          <i data-lucide="message-square"></i>
+          <h3>In-Call Messages</h3>
+        </div>
+        <div class="drawer-header-actions">
+          <button id="btnToggleChatSound" class="btn-voice-toggle active" title="Toggle Message Chime"
+            aria-label="Toggle Message Sound">
+            <i data-lucide="bell" id="soundToggleIcon"></i>
+            <span id="soundToggleText">Sound</span>
+          </button>
+          <button id="btnCloseChat" class="btn-icon-close" aria-label="Close Chat">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+      </div>
+      <div class="drawer-notice">Messages are visible to participants in this call.</div>
+      <div id="chatMessages" class="chat-messages-container"></div>
+      <form id="chatForm" class="chat-form">
+        <input type="text" id="chatInput" placeholder="Send a message to everyone..." autocomplete="off"
+          aria-label="Message input" />
+        <button type="submit" id="btnSendChat" class="btn-send" aria-label="Send message">
+          <i data-lucide="send"></i>
+        </button>
+      </form>
+    </aside>
+
+    <aside id="peopleDrawer" class="side-drawer hidden" aria-label="Participants List">
+      <div class="sheet-grabber"></div>
+      <div class="drawer-header">
+        <div class="drawer-title">
+          <i data-lucide="users"></i>
+          <h3>Participants (<span id="peopleCount">1</span>)</h3>
+        </div>
+        <button id="btnClosePeople" class="btn-icon-close" aria-label="Close Participants">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="drawer-search">
+        <button id="btnDrawerCopyLink" class="btn-drawer-invite" aria-label="Copy meeting invite link">
+          <i data-lucide="copy"></i>
+          Copy Meeting Link
+        </button>
+      </div>
+      <div id="peopleList" class="people-list-container"></div>
+    </aside>
+
+    <!-- Layout / Pinning Options Modal -->
+    <div id="layoutModal" class="modal-backdrop hidden">
+      <div class="modal-card">
+        <div class="sheet-grabber"></div>
+        <div class="modal-header">
+          <h3>Choose Layout</h3>
+          <button id="btnCloseLayoutModal" class="btn-icon-close" aria-label="Close Layout Dialog">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="layout-options-grid">
+            <div class="layout-card active" data-layout="auto">
+              <i data-lucide="sparkles" class="layout-icon"></i>
+              <h4>Auto</h4>
+              <p>Automatically spotlights the active speaker or presentation.</p>
+            </div>
+            <div class="layout-card" data-layout="tiled">
+              <i data-lucide="grid" class="layout-icon"></i>
+              <h4>Tiled Grid</h4>
+              <p>Shows everyone in equal tiles so all participants are visible.</p>
+            </div>
+            <div class="layout-card" data-layout="spotlight">
+              <i data-lucide="focus" class="layout-icon"></i>
+              <h4>Spotlight</h4>
+              <p>Focuses on the pinned person or presentation with no clutter.</p>
+            </div>
+            <div class="layout-card" data-layout="sidebar">
+              <i data-lucide="columns-2" class="layout-icon"></i>
+              <h4>Sidebar</h4>
+              <p>Main stage with participants lined up along the side.</p>
+            </div>
+          </div>
+
+          <div class="presenter-options-box">
+            <h4>When You Share Your Screen:</h4>
+            <label class="toggle-option">
+              <input type="checkbox" id="chkAudienceFocus" checked>
+              <span>Keep audience video visible while presenting</span>
+            </label>
+            <label class="toggle-option">
+              <input type="checkbox" id="chkPipSelf" checked>
+              <span>Show floating Picture-in-Picture monitor of your screen</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Floating Minimal Studio Island Control Bar -->
+  <footer class="room-footer">
+    <div class="control-group media-group">
+      <!-- Mic toggle -->
+      <button id="btnToggleMic" class="control-btn" title="Toggle Mic (Ctrl+D)" aria-label="Toggle Microphone">
+        <i data-lucide="mic" class="icon-on"></i>
+        <i data-lucide="mic-off" class="icon-off hidden"></i>
+      </button>
+
+      <!-- Cam toggle -->
+      <button id="btnToggleCam" class="control-btn" title="Toggle Camera (Ctrl+E)" aria-label="Toggle Camera">
+        <i data-lucide="video" class="icon-on"></i>
+        <i data-lucide="video-off" class="icon-off hidden"></i>
+      </button>
+    </div>
+
+    <div class="control-group action-group">
+      <!-- Screen Share toggle -->
+      <button id="btnToggleScreen" class="control-btn highlight-btn" title="Share Screen" aria-label="Share Screen">
+        <i data-lucide="monitor-up"></i>
+      </button>
+
+      <!-- Hand Raise toggle -->
+      <button id="btnRaiseHand" class="control-btn" title="Raise Hand" aria-label="Raise or Lower Hand">
+        <i data-lucide="hand"></i>
+      </button>
+
+      <!-- Reactions Menu Trigger -->
+      <div class="reaction-menu-container">
+        <button id="btnReactionTrigger" class="control-btn" title="Send Reaction" aria-label="Send Reaction">
+          <i data-lucide="smile"></i>
+        </button>
+        <div id="reactionPicker" class="reaction-picker hidden" role="menu" aria-label="Emoji Reactions">
+          <button class="reaction-opt" data-emoji="👍" aria-label="Thumbs up">👍</button>
+          <button class="reaction-opt" data-emoji="👏" aria-label="Clap">👏</button>
+          <button class="reaction-opt" data-emoji="❤️" aria-label="Heart">❤️</button>
+          <button class="reaction-opt" data-emoji="🎉" aria-label="Party">🎉</button>
+          <button class="reaction-opt" data-emoji="😂" aria-label="Joy">😂</button>
+          <button class="reaction-opt" data-emoji="🔥" aria-label="Fire">🔥</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="control-group panel-group">
+      <!-- People drawer button -->
+      <button id="btnTogglePeople" class="control-btn" title="Participants" aria-label="Toggle Participants List">
+        <i data-lucide="users"></i>
+        <span id="footerPeopleBadge" class="badge-count">1</span>
+      </button>
+
+      <!-- Chat drawer button -->
+      <button id="btnToggleChat" class="control-btn" title="Chat" aria-label="Toggle Chat Messages">
+        <i data-lucide="message-square"></i>
+        <span id="chatUnreadBadge" class="badge-count hidden">0</span>
+      </button>
+
+      <!-- End call -->
+      <button id="btnLeaveCall" class="control-btn btn-danger" title="Leave Call" aria-label="Leave Call">
+        <i data-lucide="phone-off"></i>
+      </button>
+    </div>
+  </footer>
+
+  <script src="/js/room.js"></script>
+</body>
+
+</html>

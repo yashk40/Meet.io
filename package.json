@@ -1,0 +1,14 @@
+{
+  "name": "meet-io",
+  "version": "1.0.0",
+  "description": "meet.io - Real-time Google Meet clone with rock-solid screen sharing",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.1",
+    "lucide": "^1.74.0",
+    "socket.io": "^4.8.1"
+  }
+}

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>meet.io — Bold video meetings</title>
+  <meta name="theme-color" content="#FAF8F5">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="lobby-body">
+  <!-- Subtle Grid Background -->
+  <div class="bg-grid-pattern" aria-hidden="true"></div>
+
+  <!-- Left Checkerboard Edge Decoration (PC only) -->
+  <div class="deco-checkerboard" aria-hidden="true">
+    <svg width="34" height="144" viewBox="0 0 34 144" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0" y="0" width="34" height="144" fill="#FFFFFF" />
+      <rect x="0" y="0" width="17" height="16" fill="#000000" />
+      <rect x="17" y="16" width="17" height="16" fill="#000000" />
+      <rect x="0" y="32" width="17" height="16" fill="#000000" />
+      <rect x="17" y="48" width="17" height="16" fill="#000000" />
+      <rect x="0" y="64" width="17" height="16" fill="#000000" />
+      <rect x="17" y="80" width="17" height="16" fill="#000000" />
+      <rect x="0" y="96" width="17" height="16" fill="#000000" />
+      <rect x="17" y="112" width="17" height="16" fill="#000000" />
+      <rect x="0" y="128" width="17" height="16" fill="#000000" />
+      <line x1="0" y1="1.5" x2="34" y2="1.5" stroke="#000000" stroke-width="3" />
+      <line x1="32.5" y1="0" x2="32.5" y2="144" stroke="#000000" stroke-width="3" />
+      <line x1="0" y1="142.5" x2="34" y2="142.5" stroke="#000000" stroke-width="3" />
+    </svg>
+  </div>
+
+  <!-- Bottom Corner Neo-Brutalist Badges -->
+  <div class="deco-burst-bottom-left" aria-hidden="true">
+    <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="10,140 0,70 45,95 85,20 105,75 155,50 125,110 155,145 75,130 30,155" fill="#C8FF00" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <div class="deco-prism-bottom-right" aria-hidden="true">
+    <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="45,15 145,25 155,120 70,155 10,85" fill="#8B5CF6" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+      <polygon points="45,15 95,90 10,85" fill="#7C3AED" stroke="#000000" stroke-width="3.5" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <!-- Header Navigation -->
+  <header class="lobby-header">
+    <a href="/" class="brand-badge" aria-label="meet.io home">
+      <svg class="brand-cam-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M4 5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H4zm14.5 4.5 4.5-3.5v12l-4.5-3.5v-5z"/>
+      </svg>
+      <span class="brand-name">meet.io</span>
+    </a>
+
+    <nav class="lobby-nav" aria-label="Main navigation">
+      <a href="#features" class="nav-pill">Features</a>
+      <a href="#how-it-works" class="nav-pill">How it Works</a>
+      <a href="#pricing" class="nav-pill">Pricing</a>
+      <a href="#docs" class="nav-pill">Docs</a>
+    </nav>
+
+    <div class="header-right-actions">
+      <button class="theme-toggle-btn" type="button" aria-label="Appearance settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+      <a href="#joinFlow" class="btn-signin">Sign In</a>
+    </div>
+  </header>
+
+  <!-- Hero Main Section -->
+  <main class="lobby-main">
+    <div class="lobby-content">
+
+      <!-- Left Column: Copy & Actions -->
+      <div class="hero-left">
+        <!-- Eyebrow Pill with decorative ray dashes -->
+        <div class="eyebrow-container">
+          <div class="hero-eyebrow-badge">
+            <span class="eyebrow-dot"></span>
+            <span class="eyebrow-text">Real-time Video Meetings</span>
+          </div>
+      <svg class="badge-rays" viewBox="0 0 37 20" fill="none" stroke="#000000" stroke-width="6" stroke-linecap="round" style="overflow: visible">
+  <line x1="7" y1="10" x2="15" y2="3"></line>
+  <line x1="10" y1="18" x2="29" y2="20"></line>
+  <line x1="7" y1="27" x2="15" y2="34"></line>
+</svg>
+        </div>
+
+        <!-- Headline -->
+        <h1 class="hero-title">
+          Video calls that<br>
+          never <span class="highlight-wrapper">
+            <span class="highlight-box">drop your</span>
+        <svg class="highlight-rays" viewBox="0 0 38 24" fill="none" stroke="#000000" stroke-width="6" stroke-linecap="round" style="overflow: visible">
+  <line x1="12 " y1="4" x2="3" y2="19"></line>
+  <line x1="24" y1="3" x2="24" y2="21"></line>
+  <line x1="36" y1="4" x2="45" y2="19"></line>
+</svg>
+          </span><br>
+          screen.
+        </h1>
+
+        <p class="hero-subtitle">
+          Enjoy real-time peer-to-peer calling, ultra-reliable<br class="hero-copy-break">
+          screen sharing with auto-recovery, in-call chat, and<br class="hero-copy-break">
+          reactions. Built for frictionless collaboration.
+        </p>
+
+        <!-- Action Row: New Meeting + Input -->
+        <div class="action-row">
+          <button id="btnNewMeeting" class="btn-new-meeting">
+            <svg class="btn-cam-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="6" width="13" height="12" rx="2"></rect>
+              <polygon points="22 8 16 12 22 16 22 8"></polygon>
+            </svg>
+            <span>New Meeting</span>
+          </button>
+
+          <div class="join-input-container">
+            <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+            </svg>
+            <input type="text" id="roomCodeInput" placeholder="Enter meeting code or link" autocomplete="off" />
+            <div class="join-divider"></div>
+            <button id="btnJoin" class="btn-arrow-join" title="Join meeting" aria-label="Join meeting">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- 3 Feature Perks Row -->
+        <div class="hero-perks-row" id="features">
+          <div class="perk-card">
+            <div class="perk-icon-box perk-icon-purple">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+            </div>
+            <div class="perk-text">
+              <strong>Zero-drop</strong>
+              <span>screen stream</span>
+            </div>
+          </div>
+
+          <div class="perk-separator"></div>
+
+          <div class="perk-card">
+            <div class="perk-icon-box perk-icon-lime">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+            </div>
+            <div class="perk-text">
+              <strong>Realtime</strong>
+              <span>WebRTC (1080p)</span>
+            </div>
+          </div>
+
+          <div class="perk-separator"></div>
+
+          <div class="perk-card">
+            <div class="perk-icon-box perk-icon-purple">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                <circle cx="9" cy="10" r="1" fill="currentColor"></circle>
+                <circle cx="12" cy="10" r="1" fill="currentColor"></circle>
+                <circle cx="15" cy="10" r="1" fill="currentColor"></circle>
+              </svg>
+            </div>
+            <div class="perk-text">
+              <strong>Live chat &amp;</strong>
+              <span>emoji reactions</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive Video Preview Card -->
+      <div class="hero-right">
+        <div class="card-dual-shadow-wrap">
+          <!-- 3 Lime Ray Burst Marks floating cleanly above top-right of card -->
+    <svg class="card-lime-rays" viewBox="0 0 48 48" fill="none" stroke-linecap="round" style="overflow: visible">
+  <!-- black outline (neeche) -->
+  <g stroke="#000000" stroke-width="9">
+    <line x1="10" y1="12" x2="20" y2="3"></line>
+    <line x1="14" y1="24" x2="40" y2="27"></line>
+    <line x1="10" y1="36" x2="20" y2="45"></line>
+  </g>
+  <!-- lime rays (upar) -->
+  <g stroke="#C8FF00" stroke-width="5">
+    <line x1="10" y1="12" x2="20" y2="3"></line>
+    <line x1="14" y1="24" x2="40" y2="27"></line>
+    <line x1="10" y1="36" x2="20" y2="45"></line>
+  </g>
+</svg>
+
+          <div class="preview-card" id="joinFlow">
+            <!-- Camera Preview Box -->
+            <div class="preview-video-container">
+              <!-- Pixel step decorations inside camera preview -->
+              <div class="pixel-steps-left" aria-hidden="true"></div>
+              <div class="pixel-steps-right" aria-hidden="true"></div>
+
+              <video id="previewVideo" autoplay playsinline muted></video>
+
+              <!-- Fallback Avatar with Neon Lime Circle & Bold U -->
+              <div id="previewVideoFallback" class="avatar-fallback hidden">
+                <div class="avatar-lime-circle">
+                  <span id="previewInitials">U</span>
+                </div>
+              </div>
+
+              <!-- Top Left: "Camera is on" pill -->
+              <div class="camera-status-pill">
+                <span class="status-dot"></span>
+                <span class="status-text">Camera is on</span>
+              </div>
+
+              <!-- Top Right: Settings gear -->
+              <button class="cam-top-gear" type="button" aria-label="Camera settings">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+              </button>
+
+              <!-- Bottom 3 Floating Controls -->
+              <div class="preview-controls-row">
+                <button id="btnPreviewMic" class="preview-ctrl-btn" title="Toggle Microphone" aria-label="Toggle Microphone">
+                  <svg class="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                    <line x1="12" y1="19" x2="12" y2="23"></line>
+                    <line x1="8" y1="23" x2="16" y2="23"></line>
+                  </svg>
+                  <svg class="icon-off hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                    <path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"></path>
+                    <path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23"></path>
+                    <line x1="12" y1="19" x2="12" y2="23"></line>
+                    <line x1="8" y1="23" x2="16" y2="23"></line>
+                  </svg>
+                </button>
+
+                <button id="btnPreviewCam" class="preview-ctrl-btn" title="Toggle Camera" aria-label="Toggle Camera">
+                  <svg class="icon-on" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M4 5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H4zm14.5 4.5 4.5-3.5v12l-4.5-3.5v-5z"/>
+                  </svg>
+                  <svg class="icon-off hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                    <path d="M21 21l-3.34-3.34L3 3"></path>
+                    <path d="M1 5a2 2 0 0 1 2-2h1m13 0h1a2 2 0 0 1 2 2v2"></path>
+                    <path d="M23 7v10l-4.5-3.21"></path>
+                  </svg>
+                </button>
+
+                <button class="preview-ctrl-btn" title="Device settings" aria-label="Device settings">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Audio meter (subtle indicator) -->
+              <div class="audio-meter-bar"><div id="audioMeterFill" class="meter-fill"></div></div>
+            </div>
+
+            <!-- Form section below camera -->
+            <div class="preview-details">
+              <label for="userNameInput" class="input-label">Your display name</label>
+              <div class="name-input-wrap">
+                <svg class="name-user-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <input type="text" id="userNameInput" class="name-input" placeholder="e.g. Alex" maxlength="30" />
+              </div>
+              <p class="preview-tip">You can change your camera, mic, and screen settings anytime during the call.</p>
+
+              <button id="btnJoinPreview" class="btn-join-meeting" type="button">
+                <span>Join Meeting &rarr;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+  <script src="/js/lobby.js"></script>
+</body>
+</html>

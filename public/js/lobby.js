@@ -164,24 +164,12 @@ function extractRoomId(raw) {
 btnNewMeeting?.addEventListener('click', async () => {
   try {
     saveUserName();
-    let roomId = null;
-    try {
-      const res = await fetch('/api/new-room');
-      if (res.ok) {
-        const data = await res.json();
-        roomId = data.roomId;
-      }
-    } catch (e) {}
-
-    // Fallback: generate client-side room code if endpoint unreachable
-    if (!roomId) {
-      const chars = 'abcdefghijklmnopqrstuvwxyz';
-      const segment = (len) => Array.from({ length: len }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
-      roomId = `${segment(3)}-${segment(4)}-${segment(3)}`;
+    const res = await fetch('/api/new-room');
+    const data = await res.json();
+    if (data.roomId) {
+      cleanupLobby();
+      window.location.href = `/r/${data.roomId}`;
     }
-
-    cleanupLobby();
-    window.location.href = `/r/${roomId}`;
   } catch (err) {
     console.error('Failed to create new room:', err);
   }

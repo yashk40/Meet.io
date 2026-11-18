@@ -28,7 +28,32 @@ app.add_middleware(
 
 # Async Socket.IO server with permissive CORS for WebRTC signaling
 sio = socketio.AsyncServer(async_mode="asgi", cors_allowed_origins="*")
-socket_app = socketio.ASGIApp(sio, other_asgi_app=app)
+_sio_app = socketio.ASGIApp(sio, other_asgi_app=app)
+
+SOCKET_IO_CLIENT_DIR = PUBLIC_DIR / "socket.io"
+
+class SocketClientWrapper:
+    """ASGI wrapper to serve Socket.IO client script while forwarding WebRTC signaling to python-socketio."""
+    def __init__(self, inner_app):
+        self.inner_app = inner_app
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] == "http":
+            path = scope.get("path", "")
+            if path in (
+                "/socket.io/socket.io.js",
+                "/socket.io/socket.io.min.js",
+                "/socket.io/socket.io.js.map",
+                "/socket.io/socket.io.esm.min.js",
+            ):
+                file_path = SOCKET_IO_CLIENT_DIR / Path(path).name
+                if file_path.is_file():
+                    media_type = "application/javascript" if file_path.suffix == ".js" else "application/json"
+                    response = FileResponse(file_path, media_type=media_type)
+                    return await response(scope, receive, send)
+        await self.inner_app(scope, receive, send)
+
+socket_app = SocketClientWrapper(_sio_app)
 
 # In-memory room and user session management
 # rooms: roomId -> { socketId: { userId, userName, audioMuted, videoMuted, isSharingScreen, isHandRaised, hasScreenAudio } }

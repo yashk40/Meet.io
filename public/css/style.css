@@ -1642,6 +1642,12 @@ svg.lucide, .lucide {
   font-weight: 700 !important;
   color: #FFFFFF !important;
   letter-spacing: 0.01em;
+  max-width: clamp(70px, 18vw, 160px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .tile-status {
@@ -1688,17 +1694,17 @@ svg.lucide, .lucide {
   stroke: #FF4D4D !important;
 }
 
-/* Screen Share Presentation Area */
+/* Screen Share Presentation Area (Neo-Brutalist) */
 .presentation-area {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: #000000;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  border: 1px solid var(--border-subtle);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  background: #000000 !important;
+  border: 2.5px solid #FFFFFF !important;
+  border-radius: 20px !important;
+  box-shadow: 8px 10px 0 0 #A78BFA, 8px 10px 0 2.5px #000000 !important;
+  overflow: hidden !important;
   position: relative;
 }
 
@@ -1716,15 +1722,16 @@ svg.lucide, .lucide {
 
 .presenter-badge {
   pointer-events: auto;
-  background: rgba(18, 20, 26, 0.85);
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--border-subtle);
+  background: #141622 !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border: 1.5px solid #FFFFFF !important;
   padding: 6px 14px;
-  border-radius: var(--radius-capsule);
+  border-radius: 10px !important;
+  box-shadow: 2px 2px 0 0 #A78BFA, 2px 2px 0 1px #000000 !important;
   font-size: 0.82rem;
-  font-weight: 600;
-  color: #FFFFFF;
+  font-weight: 700;
+  color: #FFFFFF !important;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -1738,15 +1745,16 @@ svg.lucide, .lucide {
 }
 
 .btn-stage-pill {
-  background: rgba(18, 20, 26, 0.85);
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-dark-secondary);
-  border-radius: var(--radius-capsule);
+  background: #141622 !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border: 1.5px solid #FFFFFF !important;
+  border-radius: 10px !important;
+  box-shadow: 2px 2px 0 0 #A78BFA, 2px 2px 0 1px #000000 !important;
+  color: #FFFFFF !important;
   padding: 6px 12px;
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: 700;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -1755,25 +1763,27 @@ svg.lucide, .lucide {
 }
 
 .btn-stage-pill:hover {
-  background: rgba(255, 255, 255, 0.14);
-  color: #FFFFFF;
-  border-color: var(--border-highlight);
+  background: #1E2130 !important;
+  color: #FFFFFF !important;
+  border-color: #FFFFFF !important;
 }
 
 .btn-stage-pill.speaker-active {
-  background: rgba(59, 130, 246, 0.22);
-  border-color: rgba(59, 130, 246, 0.5);
-  color: #93C5FD;
+  background: #D4FF00 !important;
+  border-color: #000000 !important;
+  color: #000000 !important;
+  font-weight: 700 !important;
 }
 
 .btn-fullscreen-cta {
-  background: var(--accent-powder-blue) !important;
-  color: #FFFFFF !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  background: #D4FF00 !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  font-weight: 800 !important;
 }
 
 .btn-fullscreen-cta:hover {
-  background: #1D4ED8 !important;
+  background: #E4FF4D !important;
   transform: translateY(-1px);
 }
 
@@ -1805,6 +1815,7 @@ svg.lucide, .lucide {
   height: 100dvh !important;
   border-radius: 0 !important;
   border: none !important;
+  box-shadow: none !important;
   z-index: 99999 !important;
 }
 
@@ -1870,21 +1881,23 @@ svg.lucide, .lucide {
   width: auto;
   height: auto;
   display: flex !important;
-  gap: 8px;
+  gap: 8px !important;
   z-index: 15;
-  background: rgba(18, 20, 26, 0.85);
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-  padding: 6px;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-subtle);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  background: #141622 !important;
+  border: 2px solid #FFFFFF !important;
+  border-radius: 16px !important;
+  box-shadow: 4px 6px 0 0 #A78BFA, 4px 6px 0 2px #000000 !important;
+  padding: 8px !important;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 .stage-container.sharing-active .video-tile {
   width: 130px !important;
   height: 80px !important;
-  border-radius: var(--radius-sm);
+  border: 1.5px solid #FFFFFF !important;
+  border-radius: 10px !important;
+  box-shadow: 2px 3px 0 0 #A78BFA, 2px 3px 0 1px #000000 !important;
   flex-shrink: 0;
 }
 
@@ -2206,6 +2219,10 @@ svg.lucide, .lucide {
 /* ==========================================================================
    5. SIDE DRAWERS (Chat & Participants)
    ========================================================================== */
+.sheet-grabber {
+  display: none;
+}
+
 .side-drawer {
   position: fixed;
   top: 64px;
@@ -3143,6 +3160,18 @@ svg.lucide, .lucide {
     height: 16px !important;
   }
 
+  /* Pinned Chip Mobile Clamping */
+  .pinned-chip {
+    max-width: clamp(80px, 25vw, 140px) !important;
+  }
+
+  #pinnedTargetName {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    display: inline-block !important;
+  }
+
   /* Neo-Brutalist Mobile Stage & Video Tiles */
   .room-main {
     padding: 8px 10px 76px 10px !important;
@@ -3166,6 +3195,11 @@ svg.lucide, .lucide {
   .video-grid.grid-3, .video-grid.grid-4 {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
+  }
+
+  .video-grid.grid-5, .video-grid.grid-6 {
+    grid-template-columns: 1fr 1fr !important;
+    grid-template-rows: repeat(3, 1fr) !important;
   }
 
   .video-tile {
@@ -3242,12 +3276,12 @@ svg.lucide, .lucide {
     flex-direction: row !important;
     grid-template-columns: none !important;
     grid-template-rows: none !important;
-    gap: 6px;
+    gap: 6px !important;
     overflow-x: auto;
-    background: transparent;
-    padding: 2px 0;
-    border: none;
-    box-shadow: none;
+    background: transparent !important;
+    padding: 2px 0 !important;
+    border: none !important;
+    box-shadow: none !important;
   }
 
   .stage-container.sharing-active .video-tile {

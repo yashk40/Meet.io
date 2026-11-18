@@ -123,15 +123,17 @@
             <span>Exit Fullscreen</span>
           </button>
 
-          <!-- Mobile Tap-to-Play fallback buttons -->
-          <button id="btnTapToPlayScreen" class="btn-tap-to-play hidden" aria-label="Tap to view presentation">
-            <i data-lucide="play"></i> Tap to view presentation
-          </button>
-          <button id="btnTapToPlayAudio" class="btn-tap-to-play hidden"
-            style="top: calc(50% + 55px); background: rgba(30, 41, 59, 0.92); border: 1px solid rgba(255,255,255,0.2);"
-            aria-label="Tap to enable sound">
-            <i data-lucide="volume-2"></i> Tap to enable sound
-          </button>
+          <!-- Neo-Brutalist Mobile Autoplay & Gesture Prompt -->
+          <div id="screenAutoplayOverlay" class="screen-autoplay-overlay hidden">
+            <button id="btnTapToPlayScreen" class="btn-neobrutal-play" aria-label="Tap to view presentation">
+              <i data-lucide="play" style="width: 20px; height: 20px; stroke-width: 3;"></i>
+              <span>TAP TO WATCH LIVE SCREEN</span>
+            </button>
+            <button id="btnTapToPlayAudio" class="btn-neobrutal-audio hidden" aria-label="Tap to enable sound">
+              <i data-lucide="volume-2" style="width: 18px; height: 18px; stroke-width: 2.5;"></i>
+              <span>ENABLE AUDIO</span>
+            </button>
+          </div>
         </div>
       </div>
 

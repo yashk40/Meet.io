@@ -88,6 +88,7 @@ const btnPresentationPin = document.getElementById('btnPresentationPin');
 const btnPresentationFullscreen = document.getElementById('btnPresentationFullscreen');
 const btnToggleSpeaker = document.getElementById('btnToggleSpeaker');
 const mirrorWarning = document.getElementById('mirrorWarning');
+const screenAutoplayOverlay = document.getElementById('screenAutoplayOverlay');
 const btnTapToPlayScreen = document.getElementById('btnTapToPlayScreen');
 const btnTapToPlayAudio = document.getElementById('btnTapToPlayAudio');
 
@@ -373,7 +374,8 @@ let areThumbnailsHiddenOnMobile = false;
 btnToggleThumbnails?.addEventListener('click', () => {
   areThumbnailsHiddenOnMobile = !areThumbnailsHiddenOnMobile;
   videoGrid.classList.toggle('mobile-thumbnails-hidden', areThumbnailsHiddenOnMobile);
-  btnToggleThumbnails.textContent = areThumbnailsHiddenOnMobile ? '👥 Show' : '👥 Faces';
+  btnToggleThumbnails.classList.toggle('active', areThumbnailsHiddenOnMobile);
+  showToast(areThumbnailsHiddenOnMobile ? 'Faces hidden (Max Screen)' : 'Faces visible');
 });
 
 // Loudspeaker (Media Mode) toggle for phone speakers
@@ -733,6 +735,7 @@ function createPeerConnection(remoteSocketId, remoteUserName, isInitiator) {
       if (p !== undefined) {
         p.catch(err => {
           console.log('[AUTOPLAY] Presentation blocked, showing tap button:', err);
+          screenAutoplayOverlay?.classList.remove('hidden');
           btnTapToPlayScreen?.classList.remove('hidden');
         });
       }
@@ -1171,6 +1174,7 @@ async function stopScreenShare() {
   presentationArea.classList.add('hidden');
   presentationVideo.srcObject = null;
   mirrorWarning?.classList.add('hidden');
+  screenAutoplayOverlay?.classList.add('hidden');
   btnTapToPlayScreen?.classList.add('hidden');
   btnTapToPlayAudio?.classList.add('hidden');
 
@@ -1213,6 +1217,7 @@ socket.on('user-screen-share', ({ socketId, isSharing, hasAudio }) => {
       if (p !== undefined) {
         p.catch(err => {
           console.log('[AUTOPLAY] Presentation blocked, showing tap button:', err);
+          screenAutoplayOverlay?.classList.remove('hidden');
           btnTapToPlayScreen?.classList.remove('hidden');
         });
       }
@@ -1243,6 +1248,7 @@ socket.on('user-screen-share', ({ socketId, isSharing, hasAudio }) => {
     presentationArea.classList.add('hidden');
     presentationVideo.srcObject = null;
     screenShareBanner.classList.add('hidden');
+    screenAutoplayOverlay?.classList.add('hidden');
     btnTapToPlayScreen?.classList.add('hidden');
     btnTapToPlayAudio?.classList.add('hidden');
     if (pinnedTarget === 'presentation') {
@@ -1397,31 +1403,40 @@ function removeRemoteTile(socketId) {
   }
 }
 
-// User tap-to-play listeners for mobile browsers
-btnTapToPlayScreen?.addEventListener('click', () => {
-  presentationVideo.play().then(() => {
-    btnTapToPlayScreen.classList.add('hidden');
-  }).catch(e => console.log(e));
-});
-
-btnTapToPlayAudio?.addEventListener('click', () => {
+// User tap-to-play listeners for mobile browsers (Neo-Brutalist overlay)
+function resumeAllMediaOnTap() {
+  if (loudspeakerAudioCtx && loudspeakerAudioCtx.state === 'suspended') {
+    loudspeakerAudioCtx.resume().catch(() => {});
+  }
   document.querySelectorAll('audio').forEach(a => {
     a.muted = false;
     a.volume = 1.0;
-    a.play().catch(e => console.log('Tap play audio error:', e));
+    a.play().catch(() => {});
   });
-  btnTapToPlayAudio.classList.add('hidden');
-  showToast('Audio playback enabled');
-});
+  if (presentationVideo && presentationVideo.srcObject) {
+    presentationVideo.muted = true;
+    presentationVideo.play().then(() => {
+      screenAutoplayOverlay?.classList.add('hidden');
+      btnTapToPlayScreen?.classList.add('hidden');
+    }).catch(e => console.log('Tap play screen error:', e));
+  }
+  screenAutoplayOverlay?.classList.add('hidden');
+  btnTapToPlayScreen?.classList.add('hidden');
+  btnTapToPlayAudio?.classList.add('hidden');
+}
+
+btnTapToPlayScreen?.addEventListener('click', resumeAllMediaOnTap);
+btnTapToPlayAudio?.addEventListener('click', resumeAllMediaOnTap);
+screenAutoplayOverlay?.addEventListener('click', resumeAllMediaOnTap);
 
 document.addEventListener('touchstart', () => {
   if (loudspeakerAudioCtx && loudspeakerAudioCtx.state === 'suspended') {
     loudspeakerAudioCtx.resume().catch(() => {});
   }
   document.querySelectorAll('audio').forEach(a => a.play().catch(() => {}));
-  btnTapToPlayAudio?.classList.add('hidden');
-  if (presentationVideo.srcObject) {
+  if (presentationVideo && presentationVideo.srcObject) {
     presentationVideo.play().then(() => {
+      screenAutoplayOverlay?.classList.add('hidden');
       btnTapToPlayScreen?.classList.add('hidden');
     }).catch(() => {});
   }
@@ -1432,9 +1447,9 @@ document.addEventListener('click', () => {
     loudspeakerAudioCtx.resume().catch(() => {});
   }
   document.querySelectorAll('audio').forEach(a => a.play().catch(() => {}));
-  btnTapToPlayAudio?.classList.add('hidden');
-  if (presentationVideo.srcObject) {
+  if (presentationVideo && presentationVideo.srcObject) {
     presentationVideo.play().then(() => {
+      screenAutoplayOverlay?.classList.add('hidden');
       btnTapToPlayScreen?.classList.add('hidden');
     }).catch(() => {});
   }

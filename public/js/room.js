@@ -488,8 +488,202 @@ function applyLayoutClasses() {
 }
 
 // ==========================================
-// 2. LOCAL MEDIA SETUP
+// 2. CLOUDFLARE CALLS (SFU) & LOCAL MEDIA SETUP
 // ==========================================
+let isSfuActive = false;
+let cfClient = null;
+
+class CloudflareCallsClient {
+  constructor() {
+    this.sessionId = null;
+    this.publishPc = null;
+    this.subscribePcs = new Map(); // socketId -> RTCPeerConnection
+    this.publishedTracks = [];
+  }
+
+  async initSession() {
+    try {
+      const res = await fetch('/api/calls/sessions/new', { method: 'POST' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      if (data.sessionId) {
+        this.sessionId = data.sessionId;
+        console.log('[CF-CALLS] Session established with Cloudflare Anycast SFU:', this.sessionId);
+        return true;
+      }
+    } catch (e) {
+      console.warn('[CF-CALLS] Session init failed, falling back to P2P mesh:', e.message);
+    }
+    return false;
+  }
+
+  async publish(stream) {
+    if (!this.sessionId || !stream) return;
+    try {
+      if (this.publishPc) {
+        try { this.publishPc.close(); } catch (e) {}
+      }
+      this.publishPc = new RTCPeerConnection(rtcConfig);
+
+      const tracksToPublish = [];
+      stream.getTracks().forEach(track => {
+        const transceiver = this.publishPc.addTransceiver(track, { direction: 'sendonly', streams: [stream] });
+        tracksToPublish.push({
+          location: 'local',
+          mid: transceiver.mid,
+          trackName: track.kind === 'video' ? 'video' : 'audio',
+          kind: track.kind
+        });
+      });
+
+      const offer = await this.publishPc.createOffer();
+      await this.publishPc.setLocalDescription(offer);
+
+      const res = await fetch(`/api/calls/sessions/${this.sessionId}/tracks/new`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionDescription: {
+            type: 'offer',
+            sdp: this.publishPc.localDescription.sdp
+          },
+          tracks: tracksToPublish.map(t => ({ location: 'local', mid: t.mid, trackName: t.trackName }))
+        })
+      });
+
+      const data = await res.json();
+      if (data.sessionDescription) {
+        await this.publishPc.setRemoteDescription(new RTCSessionDescription(data.sessionDescription));
+        this.publishedTracks = data.tracks || [];
+        console.log('[CF-CALLS] Published tracks to Cloudflare SFU:', this.publishedTracks);
+
+        socket.emit('tracks-published', {
+          callsSessionId: this.sessionId,
+          tracks: this.publishedTracks
+        });
+      }
+    } catch (err) {
+      console.error('[CF-CALLS] Failed to publish tracks:', err);
+    }
+  }
+
+  async replaceVideoTrack(newTrack) {
+    if (!this.publishPc || !newTrack) return;
+    try {
+      const senders = this.publishPc.getSenders();
+      const videoSender = senders.find(s => s.track && s.track.kind === 'video') || senders.find(s => !s.track);
+      if (videoSender) {
+        await videoSender.replaceTrack(newTrack);
+        console.log('[CF-CALLS] Video track replaced on SFU publisher');
+      }
+    } catch (e) {
+      console.warn('[CF-CALLS] replaceVideoTrack error:', e);
+    }
+  }
+
+  async replaceAudioTrack(newTrack) {
+    if (!this.publishPc || !newTrack) return;
+    try {
+      const senders = this.publishPc.getSenders();
+      const audioSender = senders.find(s => s.track && s.track.kind === 'audio') || senders.find(s => !s.track);
+      if (audioSender) {
+        await audioSender.replaceTrack(newTrack);
+        console.log('[CF-CALLS] Audio track replaced on SFU publisher');
+      }
+    } catch (e) {
+      console.warn('[CF-CALLS] replaceAudioTrack error:', e);
+    }
+  }
+
+  async subscribe(remoteUser, availableTracks) {
+    if (!this.sessionId || !remoteUser.callsSessionId || remoteUser.socketId === socket.id) return;
+    try {
+      let subPc = this.subscribePcs.get(remoteUser.socketId);
+      if (subPc) {
+        try { subPc.close(); } catch (e) {}
+      }
+
+      subPc = new RTCPeerConnection(rtcConfig);
+      this.subscribePcs.set(remoteUser.socketId, subPc);
+
+      const remoteStream = new MediaStream();
+
+      subPc.ontrack = (event) => {
+        console.log(`[CF-CALLS] Received remote SFU track (${event.track.kind}) from ${remoteUser.userName}`);
+        remoteStream.addTrack(event.track);
+
+        if (event.track.kind === 'audio') {
+          let audioEl = document.getElementById(`audio-${remoteUser.socketId}`);
+          if (!audioEl) {
+            audioEl = document.createElement('audio');
+            audioEl.id = `audio-${remoteUser.socketId}`;
+            audioEl.autoplay = true;
+            audioEl.playsInline = true;
+            document.body.appendChild(audioEl);
+          }
+          audioEl.srcObject = remoteStream;
+          audioEl.play().catch(() => {});
+        }
+
+        renderOrUpdateRemoteTile(remoteUser.socketId, remoteUser.userName, remoteStream);
+      };
+
+      subPc.addTransceiver('audio', { direction: 'recvonly' });
+      subPc.addTransceiver('video', { direction: 'recvonly' });
+
+      const offer = await subPc.createOffer();
+      await subPc.setLocalDescription(offer);
+
+      const tracksToPull = (availableTracks && availableTracks.length > 0)
+        ? availableTracks.map(t => ({ location: 'remote', sessionId: remoteUser.callsSessionId, trackName: t.trackName || t }))
+        : [
+            { location: 'remote', sessionId: remoteUser.callsSessionId, trackName: 'audio' },
+            { location: 'remote', sessionId: remoteUser.callsSessionId, trackName: 'video' }
+          ];
+
+      const res = await fetch(`/api/calls/sessions/${this.sessionId}/tracks/new`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionDescription: {
+            type: 'offer',
+            sdp: subPc.localDescription.sdp
+          },
+          tracks: tracksToPull
+        })
+      });
+
+      const data = await res.json();
+      if (data.sessionDescription) {
+        await subPc.setRemoteDescription(new RTCSessionDescription(data.sessionDescription));
+        console.log(`[CF-CALLS] Successfully subscribed to ${remoteUser.userName} via Cloudflare SFU!`);
+      }
+    } catch (err) {
+      console.error(`[CF-CALLS] Error subscribing to ${remoteUser.userName}:`, err);
+    }
+  }
+
+  cleanup(remoteSocketId) {
+    if (this.subscribePcs.has(remoteSocketId)) {
+      try {
+        this.subscribePcs.get(remoteSocketId).close();
+      } catch (e) {}
+      this.subscribePcs.delete(remoteSocketId);
+    }
+  }
+
+  close() {
+    if (this.publishPc) {
+      try { this.publishPc.close(); } catch (e) {}
+      this.publishPc = null;
+    }
+    for (const [id, pc] of this.subscribePcs.entries()) {
+      try { pc.close(); } catch (e) {}
+    }
+    this.subscribePcs.clear();
+  }
+}
+
 async function initLocalMedia() {
   try {
     localStream = await navigator.mediaDevices.getUserMedia({
@@ -509,12 +703,39 @@ async function initLocalMedia() {
       updateCamButtonUI(true);
     }
 
+    // Check Cloudflare Calls SFU availability
+    try {
+      const configRes = await fetch('/api/calls/config').catch(() => null);
+      if (configRes && configRes.ok) {
+        const config = await configRes.json();
+        if (config.sfuEnabled) {
+          cfClient = new CloudflareCallsClient();
+          isSfuActive = await cfClient.initSession();
+          if (isSfuActive) {
+            console.log('[ENGINE] Connected to Cloudflare Calls (Anycast SFU)!');
+            showToast('Connected to Cloudflare Calls SFU');
+          }
+        }
+      }
+    } catch (cfErr) {
+      console.warn('[ENGINE] Cloudflare Calls check failed, falling back to P2P:', cfErr);
+    }
+
+    if (!isSfuActive) {
+      console.log('[ENGINE] Running in P2P Mesh WebRTC Mode');
+    }
+
     // Connect to Room via Socket.IO
     socket.emit('join-room', {
       roomId,
       userId: socket.id,
-      userName
+      userName,
+      callsSessionId: cfClient ? cfClient.sessionId : null
     });
+
+    if (isSfuActive && cfClient) {
+      await cfClient.publish(localStream);
+    }
 
     initLocalAudioVisualizer(localStream);
 
@@ -569,13 +790,22 @@ socket.on('all-users', (users) => {
   console.log('[WEBRTC] Existing room users:', users);
   users.forEach(user => {
     if (user.socketId !== socket.id) {
-      const pc = createPeerConnection(user.socketId, user.userName, true);
-      peers.set(user.socketId, {
-        pc,
-        user,
-        stream: new MediaStream(),
-        candidateQueue: []
-      });
+      if (isSfuActive && user.callsSessionId && cfClient) {
+        // Cloudflare Calls SFU subscription
+        cfClient.subscribe(user, user.publishedTracks);
+      } else {
+        // P2P Mesh peer connection
+        const pc = createPeerConnection(user.socketId, user.userName, true);
+        peers.set(user.socketId, {
+          pc,
+          user,
+          stream: new MediaStream(),
+          candidateQueue: []
+        });
+
+        // Existing user creates the offer
+        initiateOffer(user.socketId, pc);
+      }
 
       // If an existing user is already sharing screen, show presentation stage immediately!
       if (user.isSharingScreen) {
@@ -587,9 +817,6 @@ socket.on('all-users', (users) => {
         screenShareText.textContent = `${user.userName} is presenting${audioLabel}`;
         mirrorWarning?.classList.add('hidden');
       }
-
-      // Existing user creates the offer
-      initiateOffer(user.socketId, pc);
     }
   });
   updateParticipantCount();
@@ -599,15 +826,31 @@ socket.on('all-users', (users) => {
 socket.on('user-joined', (user) => {
   console.log('[WEBRTC] New user joined:', user);
   showToast(`${user.userName} joined the meeting`);
-  const pc = createPeerConnection(user.socketId, user.userName, false);
-  peers.set(user.socketId, {
-    pc,
-    user,
-    stream: new MediaStream(),
-    candidateQueue: []
-  });
+
+  if (isSfuActive && user.callsSessionId && cfClient) {
+    // Cloudflare Calls SFU subscription
+    cfClient.subscribe(user, user.publishedTracks);
+  } else {
+    // P2P Mesh peer connection
+    const pc = createPeerConnection(user.socketId, user.userName, false);
+    peers.set(user.socketId, {
+      pc,
+      user,
+      stream: new MediaStream(),
+      candidateQueue: []
+    });
+  }
+
   updateParticipantCount();
   applyLayoutClasses();
+});
+
+// When a remote peer publishes new tracks to Cloudflare Calls
+socket.on('user-tracks-available', ({ socketId, userName, callsSessionId, tracks }) => {
+  if (isSfuActive && cfClient && socketId !== socket.id) {
+    console.log(`[CF-CALLS] User ${userName} published new tracks:`, tracks);
+    cfClient.subscribe({ socketId, userName, callsSessionId }, tracks);
+  }
 });
 
 // Active Media Track Getters (dynamically handles screen share with audio mixing)
@@ -855,6 +1098,9 @@ socket.on('user-left', ({ socketId, userName: leftUserName }) => {
   console.log(`[WEBRTC] ${leftUserName} left`);
   showToast(`${leftUserName} left the meeting`);
   removeRemoteTile(socketId);
+  if (isSfuActive && cfClient) {
+    cfClient.cleanup(socketId);
+  }
   if (peers.has(socketId)) {
     const { pc } = peers.get(socketId);
     pc.close();
@@ -1010,6 +1256,14 @@ async function startScreenShare() {
       outgoingAudioTrack = setupScreenAudioMixing(screenAudioTrack);
     }
 
+    // Update Cloudflare Calls SFU publisher if active
+    if (isSfuActive && cfClient) {
+      cfClient.replaceVideoTrack(screenTrack);
+      if (outgoingAudioTrack) {
+        cfClient.replaceAudioTrack(outgoingAudioTrack);
+      }
+    }
+
     // 3. Update all active peer connections with video and audio tracks
     for (const [peerId, peerData] of peers.entries()) {
       try {
@@ -1155,6 +1409,12 @@ async function stopScreenShare() {
     } catch (err) {
       console.warn(`[SCREEN SHIELD] Error restoring cam/mic for peer ${peerId}:`, err);
     }
+  }
+
+  // Restore Cloudflare Calls SFU publisher tracks if active
+  if (isSfuActive && cfClient) {
+    if (camTrack) cfClient.replaceVideoTrack(camTrack);
+    if (micTrack) cfClient.replaceAudioTrack(micTrack);
   }
 
   // 4. Hide PIP & presentation stage

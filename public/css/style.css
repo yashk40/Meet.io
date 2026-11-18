@@ -3466,11 +3466,12 @@ svg.lucide, .lucide {
 
   .room-code,
   #displayRoomId {
-    max-width: clamp(55px, 18vw, 85px) !important;
+    white-space: nowrap !important;
+    max-width: none !important;
+    overflow: visible !important;
     font-size: 0.74rem !important;
   }
 
-  #btnLayoutMenu,
   #btnHeaderPeople {
     padding: 4px 8px !important;
     font-size: 0.74rem !important;

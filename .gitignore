@@ -2,3 +2,7 @@ node_modules/
 cloudflared.exe
 .superpowers/
 *.log
+
+__pycache__/
+*.pyc
+.env

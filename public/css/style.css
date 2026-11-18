@@ -1181,16 +1181,26 @@ svg.lucide, .lucide {
   z-index: 30;
 }
 
-.header-left, .header-right {
+.header-left {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex: 1;
 }
 
 .header-center {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex: 1;
 }
 
 /* Neo-Brutalist Room Code Pill */
@@ -3107,9 +3117,15 @@ svg.lucide, .lucide {
     gap: 8px !important;
   }
 
-  .header-left,
+  .header-left {
+    gap: 8px !important;
+    flex: 1 !important;
+  }
+
   .header-right {
     gap: 8px !important;
+    flex: 1 !important;
+    justify-content: flex-end !important;
   }
 
   .room-pill,

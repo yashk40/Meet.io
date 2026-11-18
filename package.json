@@ -2,9 +2,11 @@
   "name": "meet-io",
   "version": "1.0.0",
   "description": "meet.io - Real-time Google Meet clone with rock-solid screen sharing",
-  "main": "server.js",
+  "main": "main.py",
   "scripts": {
-    "start": "node server.js"
+    "start": "python main.py",
+    "start:uvicorn": "uvicorn main:socket_app --host 0.0.0.0 --port 3000 --reload",
+    "start:node": "node server.js"
   },
   "dependencies": {
     "express": "^4.21.1",

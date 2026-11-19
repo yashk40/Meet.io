@@ -48,7 +48,7 @@ let mixedAudioTrack = null;
 
 // Mobile Loudspeaker / Media Mode Output State
 let loudspeakerAudioCtx = null;
-let loudspeakerSource = null;
+const loudspeakerSources = new Map(); // socketId -> MediaStreamAudioSourceNode
 let isLoudspeakerEnabled = true;
 
 // Layout & Pinning state
@@ -379,7 +379,7 @@ btnToggleThumbnails?.addEventListener('click', () => {
 });
 
 // Loudspeaker (Media Mode) toggle for phone speakers
-function routeAudioToLoudspeaker(stream) {
+function routeAudioToLoudspeaker(socketId, stream) {
   try {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     if (!AudioContextClass) return;
@@ -391,15 +391,17 @@ function routeAudioToLoudspeaker(stream) {
       loudspeakerAudioCtx.resume().catch(() => {});
     }
 
-    if (loudspeakerSource) {
-      try { loudspeakerSource.disconnect(); } catch (e) {}
-      loudspeakerSource = null;
+    // Disconnect only this peer's previous source (not everyone's)
+    if (loudspeakerSources.has(socketId)) {
+      try { loudspeakerSources.get(socketId).disconnect(); } catch (e) {}
+      loudspeakerSources.delete(socketId);
     }
 
     if (stream && stream.getAudioTracks().length > 0) {
-      loudspeakerSource = loudspeakerAudioCtx.createMediaStreamSource(stream);
-      loudspeakerSource.connect(loudspeakerAudioCtx.destination);
-      console.log('[LOUDSPEAKER] Remote audio routed to Web Audio Loudspeaker destination (Media Mode)');
+      const src = loudspeakerAudioCtx.createMediaStreamSource(stream);
+      src.connect(loudspeakerAudioCtx.destination);
+      loudspeakerSources.set(socketId, src);
+      console.log(`[LOUDSPEAKER] ${socketId} audio routed to Web Audio destination`);
     }
   } catch (err) {
     console.warn('[LOUDSPEAKER] Routing error:', err);
@@ -419,10 +421,11 @@ function updateSpeakerButtonUI(enabled) {
 function toggleLoudspeaker(enable) {
   isLoudspeakerEnabled = enable !== undefined ? enable : !isLoudspeakerEnabled;
   if (!isLoudspeakerEnabled) {
-    if (loudspeakerSource) {
-      try { loudspeakerSource.disconnect(); } catch (e) {}
-      loudspeakerSource = null;
+    // Disconnect all peer audio sources
+    for (const [, src] of loudspeakerSources) {
+      try { src.disconnect(); } catch (e) {}
     }
+    loudspeakerSources.clear();
     document.querySelectorAll('audio').forEach(a => {
       a.muted = false;
       a.volume = 1.0;
@@ -432,7 +435,7 @@ function toggleLoudspeaker(enable) {
   } else {
     for (const [peerId, peerData] of peers.entries()) {
       if (peerData.stream && peerData.stream.getAudioTracks().length > 0) {
-        routeAudioToLoudspeaker(peerData.stream);
+        routeAudioToLoudspeaker(peerId, peerData.stream);
       }
     }
     showToast('🔊 Switched to Loudspeaker (Media Mode)');
@@ -717,7 +720,7 @@ function createPeerConnection(remoteSocketId, remoteUserName, isInitiator) {
         });
       }
       if (isLoudspeakerEnabled) {
-        routeAudioToLoudspeaker(peerData.stream);
+        routeAudioToLoudspeaker(remoteSocketId, peerData.stream);
       }
     }
 
@@ -1251,7 +1254,7 @@ socket.on('user-screen-share', ({ socketId, isSharing, hasAudio }) => {
     }
 
     if (isLoudspeakerEnabled && peerData?.stream) {
-      routeAudioToLoudspeaker(peerData.stream);
+      routeAudioToLoudspeaker(socketId, peerData.stream);
     }
     updateSpeakerButtonUI(isLoudspeakerEnabled);
 
@@ -1416,6 +1419,11 @@ function removeRemoteTile(socketId) {
   const audioEl = document.getElementById(`audio-${socketId}`);
   if (audioEl && audioEl.parentNode) {
     audioEl.parentNode.removeChild(audioEl);
+  }
+  // Disconnect this peer's Web Audio loudspeaker source to prevent ghost audio
+  if (loudspeakerSources.has(socketId)) {
+    try { loudspeakerSources.get(socketId).disconnect(); } catch (e) {}
+    loudspeakerSources.delete(socketId);
   }
 }
 

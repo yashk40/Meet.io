@@ -382,6 +382,22 @@ btnServerStatus?.addEventListener('click', () => {
   }
 });
 
+// Interactive helper triggers for lobby actions
+const themeToggleBtn = document.querySelector('.theme-toggle-btn');
+themeToggleBtn?.addEventListener('click', () => {
+  showLobbyToast('🌙 Neo-Brutalist Dark is active. Light mode coming soon!', 3000);
+});
+
+const camTopGear = document.querySelector('.cam-top-gear');
+camTopGear?.addEventListener('click', () => {
+  showLobbyToast('⚙️ Camera settings are available during the call.', 3000);
+});
+
+const btnPreviewSettings = document.getElementById('btnPreviewSettings');
+btnPreviewSettings?.addEventListener('click', () => {
+  showLobbyToast('⚙️ Audio & video device selection available in-call.', 3000);
+});
+
 // Start pre-call camera and server check
 window.addEventListener('DOMContentLoaded', () => {
   initLobbyMedia();

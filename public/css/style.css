@@ -63,6 +63,10 @@
   --transition-smooth: all 0.22s var(--spring-ease);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: var(--font-family);
   line-height: 1.45;

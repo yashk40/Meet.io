@@ -547,8 +547,22 @@ async function initLocalMedia() {
 
   } catch (err) {
     console.error('Error getting local media:', err);
-    showToast('Camera/Mic permission needed. Running in audio-only or fallback mode.');
-    // Create empty audio stream fallback
+
+    // Try audio-only fallback if camera was the problem
+    try {
+      localStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
+      localVideo.srcObject = localStream;
+      showToast('⚠️ Camera blocked — joined in audio-only mode.');
+    } catch (audioErr) {
+      console.warn('Audio-only fallback also failed:', audioErr);
+      showToast('⚠️ Camera & mic blocked — joined without media.');
+    }
+
+    // Mark camera as muted so avatar shows instead of a black tile
+    isCamMuted = true;
+    updateCamButtonUI(true);
+    localAvatar?.classList.remove('hidden');
+
     socket.emit('join-room', { roomId, userId: socket.id, userName });
   }
 }

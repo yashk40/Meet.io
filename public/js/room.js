@@ -1010,6 +1010,12 @@ btnToggleScreen?.addEventListener('click', async () => {
 });
 
 async function startScreenShare() {
+  // Guard: getDisplayMedia is not available on iOS Safari or most Android browsers
+  if (!navigator.mediaDevices || typeof navigator.mediaDevices.getDisplayMedia !== 'function') {
+    showToast('📱 Screen sharing is not supported on mobile browsers. Use Desktop Chrome or Edge.');
+    return;
+  }
+
   try {
     // 1. Multi-tier capture with high fidelity audio constraints & systemAudio
     try {
@@ -1937,3 +1943,12 @@ document.addEventListener('keydown', (e) => {
 
 // Start media setup on page load
 window.addEventListener('DOMContentLoaded', initLocalMedia);
+
+// Dim screen-share button on browsers that don't support getDisplayMedia
+if (!navigator.mediaDevices || typeof navigator.mediaDevices.getDisplayMedia !== 'function') {
+  if (btnToggleScreen) {
+    btnToggleScreen.style.opacity = '0.4';
+    btnToggleScreen.title = 'Screen sharing not supported on this browser';
+    btnToggleScreen.setAttribute('aria-label', 'Screen sharing not supported on this browser');
+  }
+}

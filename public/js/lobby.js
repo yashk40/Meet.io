@@ -276,7 +276,12 @@ async function pingBackend(timeoutMs = 4000) {
       signal: controller.signal
     });
     clearTimeout(timeoutId);
-    return res.ok;
+    if (res.ok) return true;
+    if (res.status === 404) {
+      const fallback = await fetch(`${backendUrl}/api/new-room`);
+      return fallback.ok;
+    }
+    return false;
   } catch (e) {
     clearTimeout(timeoutId);
     return false;

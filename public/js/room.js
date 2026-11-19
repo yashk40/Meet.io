@@ -27,7 +27,7 @@ if (urlParams.get('room')) {
 // Current user state
 let userName = localStorage.getItem('meet_userName') || '';
 if (!userName.trim()) {
-  userName = prompt('Enter your name to join the meeting:', 'Guest') || 'Guest';
+  userName = 'Guest ' + (Math.floor(Math.random() * 900) + 100);
   localStorage.setItem('meet_userName', userName);
 }
 
@@ -219,7 +219,21 @@ function copyMeetingLink() {
       }, 2000);
     }
   }).catch(() => {
-    prompt('Copy this meeting link:', shortUrl);
+    // Clipboard API failed — try execCommand fallback, then show toast
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = shortUrl;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast('📋 Link copied: ' + shortUrl);
+    } catch (e) {
+      showToast('🔗 Link: ' + shortUrl);
+    }
   });
 }
 roomPill?.addEventListener('click', copyMeetingLink);
@@ -1886,13 +1900,38 @@ window.addEventListener('keydown', (e) => {
   }
 });
 
+const leaveModal = document.getElementById('leaveModal');
+const btnLeaveConfirm = document.getElementById('btnLeaveConfirm');
+const btnLeaveCancel = document.getElementById('btnLeaveCancel');
+
+function doLeave() {
+  if (localStream) localStream.getTracks().forEach(t => t.stop());
+  if (screenStream) screenStream.getTracks().forEach(t => t.stop());
+  peers.forEach(({ pc }) => pc.close());
+  socket.disconnect();
+  window.location.href = '/';
+}
+
 btnLeaveCall?.addEventListener('click', () => {
-  if (confirm('Leave this meeting?')) {
-    if (localStream) localStream.getTracks().forEach(t => t.stop());
-    if (screenStream) screenStream.getTracks().forEach(t => t.stop());
-    peers.forEach(({ pc }) => pc.close());
-    socket.disconnect();
-    window.location.href = '/';
+  leaveModal?.classList.remove('hidden');
+  if (window.lucide) window.lucide.createIcons({ root: leaveModal });
+});
+
+btnLeaveConfirm?.addEventListener('click', doLeave);
+
+btnLeaveCancel?.addEventListener('click', () => {
+  leaveModal?.classList.add('hidden');
+});
+
+// Close modal on backdrop click
+leaveModal?.addEventListener('click', (e) => {
+  if (e.target === leaveModal) leaveModal.classList.add('hidden');
+});
+
+// Close on Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && leaveModal && !leaveModal.classList.contains('hidden')) {
+    leaveModal.classList.add('hidden');
   }
 });
 

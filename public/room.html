@@ -363,6 +363,24 @@
     </div>
   </footer>
 
+  <!-- Leave Meeting Confirmation Modal -->
+  <div id="leaveModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="leaveModalTitle">
+    <div class="modal-card leave-modal-card">
+      <div class="leave-modal-icon">
+        <i data-lucide="phone-off" style="width:28px;height:28px;stroke-width:2.5;"></i>
+      </div>
+      <h3 id="leaveModalTitle" class="leave-modal-title">LEAVE MEETING?</h3>
+      <p class="leave-modal-sub">You'll be disconnected from this call. Others will stay in the room.</p>
+      <div class="leave-modal-actions">
+        <button id="btnLeaveCancel" class="leave-btn-cancel">STAY</button>
+        <button id="btnLeaveConfirm" class="leave-btn-confirm">
+          <i data-lucide="phone-off" style="width:16px;height:16px;stroke-width:2.5;"></i>
+          LEAVE
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script src="/js/room.js"></script>
 </body>
 

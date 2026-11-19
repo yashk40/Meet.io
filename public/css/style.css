@@ -3916,3 +3916,121 @@ svg.lucide, .lucide {
   outline: 2px solid #A78BFA !important;
   outline-offset: 2px !important;
 }
+
+/* ==========================================
+   Leave Meeting Confirmation Modal
+   ========================================== */
+.leave-modal-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  max-width: 320px !important;
+  padding: 28px 24px 22px !important;
+  border-color: #FF4D4D !important;
+  box-shadow: 6px 8px 0 0 #FF4D4D, 6px 8px 0 2.5px #000 !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.leave-modal-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #FF4D4D 0%, #A78BFA 100%);
+}
+
+.leave-modal-icon {
+  width: 56px;
+  height: 56px;
+  background: #FF4D4D;
+  border: 2.5px solid #000;
+  border-radius: 14px;
+  box-shadow: 3px 4px 0 0 #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.leave-modal-title {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #FFFFFF;
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+
+.leave-modal-sub {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #94A3B8;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.leave-modal-actions {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.leave-btn-cancel {
+  flex: 1;
+  background: #1E2130 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+  border-radius: 10px !important;
+  box-shadow: 3px 4px 0 0 #000 !important;
+  padding: 11px 0 !important;
+  font-size: 0.82rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.06em !important;
+  cursor: pointer !important;
+  transition: transform 0.1s ease, box-shadow 0.1s ease !important;
+}
+
+.leave-btn-cancel:hover {
+  background: #252846 !important;
+  transform: translateY(-2px);
+  box-shadow: 3px 6px 0 0 #000 !important;
+}
+
+.leave-btn-cancel:active {
+  transform: translate(2px, 3px);
+  box-shadow: 1px 1px 0 0 #000 !important;
+}
+
+.leave-btn-confirm {
+  flex: 1;
+  background: #FF4D4D !important;
+  color: #FFFFFF !important;
+  border: 2px solid #000 !important;
+  border-radius: 10px !important;
+  box-shadow: 3px 4px 0 0 #000 !important;
+  padding: 11px 0 !important;
+  font-size: 0.82rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.06em !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  transition: transform 0.1s ease, box-shadow 0.1s ease !important;
+}
+
+.leave-btn-confirm:hover {
+  background: #FF6B6B !important;
+  transform: translateY(-2px);
+  box-shadow: 3px 6px 0 0 #000 !important;
+}
+
+.leave-btn-confirm:active {
+  transform: translate(2px, 3px);
+  box-shadow: 1px 1px 0 0 #000 !important;
+}

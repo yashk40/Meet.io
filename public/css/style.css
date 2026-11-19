@@ -2073,71 +2073,142 @@ svg.lucide, .lucide {
 /* Neo-Brutalist Autoplay & Stream Unblock Overlay */
 .screen-autoplay-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 30;
+  padding: 20px;
+}
+
+/* The card itself */
+.autoplay-card {
+  background: #0D0E15;
+  border: 3px solid #000;
+  border-radius: 20px;
+  box-shadow: 6px 8px 0 0 #A78BFA, 6px 8px 0 3px #000;
+  padding: 28px 24px 22px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 14px;
+  max-width: 300px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Accent stripe top */
+.autoplay-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #D4FF00 0%, #A78BFA 50%, #38BDF8 100%);
+}
+
+.autoplay-icon-wrap {
+  width: 56px;
+  height: 56px;
+  background: #D4FF00;
+  border: 2.5px solid #000;
+  border-radius: 14px;
+  box-shadow: 3px 4px 0 0 #000;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 12px;
-  background: rgba(13, 14, 21, 0.8) !important;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 30;
-  padding: 20px;
+  color: #000;
+  flex-shrink: 0;
+}
+
+.autoplay-text {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.autoplay-title {
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: #FFFFFF;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.autoplay-sub {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #94A3B8;
+  margin: 0;
+  line-height: 1.4;
 }
 
 .btn-neobrutal-play {
   background: #D4FF00 !important;
   color: #000000 !important;
   border: 2.5px solid #000000 !important;
-  border-radius: 14px !important;
-  box-shadow: 4px 6px 0 0 #A78BFA, 4px 6px 0 2.5px #000000 !important;
-  padding: 12px 24px !important;
-  font-size: 0.88rem !important;
+  border-radius: 12px !important;
+  box-shadow: 4px 5px 0 0 #000 !important;
+  padding: 13px 26px !important;
+  font-size: 0.85rem !important;
   font-weight: 900 !important;
-  letter-spacing: 0.03em !important;
+  letter-spacing: 0.06em !important;
   cursor: pointer !important;
   display: inline-flex !important;
   align-items: center !important;
   gap: 10px !important;
-  transition: transform 0.12s ease, box-shadow 0.12s ease !important;
+  transition: transform 0.1s ease, box-shadow 0.1s ease !important;
   user-select: none !important;
+  width: 100% !important;
+  justify-content: center !important;
+  text-transform: uppercase !important;
 }
 
 .btn-neobrutal-play:hover {
   transform: translateY(-2px);
-  box-shadow: 6px 8px 0 0 #A78BFA, 6px 8px 0 2.5px #000000 !important;
+  box-shadow: 4px 7px 0 0 #000 !important;
   background: #E4FF4D !important;
 }
 
 .btn-neobrutal-play:active {
-  transform: translate(2px, 3px);
-  box-shadow: 2px 2px 0 0 #A78BFA, 2px 2px 0 2px #000000 !important;
+  transform: translate(3px, 4px);
+  box-shadow: 1px 1px 0 0 #000 !important;
 }
 
 .btn-neobrutal-audio {
-  background: #000000 !important;
-  color: #FFFFFF !important;
-  border: 2px solid #FFFFFF !important;
-  border-radius: 12px !important;
-  box-shadow: 3px 4px 0 0 #A78BFA, 3px 4px 0 2px #000000 !important;
-  padding: 10px 18px !important;
+  background: #1E1F2E !important;
+  color: #D4FF00 !important;
+  border: 2px solid #D4FF00 !important;
+  border-radius: 10px !important;
+  box-shadow: 3px 4px 0 0 #000 !important;
+  padding: 10px 20px !important;
   font-size: 0.78rem !important;
   font-weight: 800 !important;
-  letter-spacing: 0.03em !important;
+  letter-spacing: 0.05em !important;
   cursor: pointer !important;
   display: inline-flex !important;
   align-items: center !important;
   gap: 8px !important;
-  transition: transform 0.12s ease, box-shadow 0.12s ease !important;
+  transition: transform 0.1s ease, box-shadow 0.1s ease !important;
+  width: 100% !important;
+  justify-content: center !important;
+  text-transform: uppercase !important;
+}
+
+.btn-neobrutal-audio:hover {
+  transform: translateY(-1px);
+  box-shadow: 3px 5px 0 0 #000 !important;
+  background: #252640 !important;
 }
 
 .btn-neobrutal-audio:active {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 2px 0 0 #A78BFA, 1px 2px 0 1.5px #000000 !important;
+  transform: translate(2px, 3px);
+  box-shadow: 1px 1px 0 0 #000 !important;
 }
 
 /* Screen Sharing Active Thumbnail Strip */

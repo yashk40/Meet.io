@@ -125,14 +125,23 @@
 
           <!-- Neo-Brutalist Mobile Autoplay & Gesture Prompt -->
           <div id="screenAutoplayOverlay" class="screen-autoplay-overlay hidden">
-            <button id="btnTapToPlayScreen" class="btn-neobrutal-play" aria-label="Tap to view presentation">
-              <i data-lucide="play" style="width: 20px; height: 20px; stroke-width: 3;"></i>
-              <span>TAP TO WATCH LIVE SCREEN</span>
-            </button>
-            <button id="btnTapToPlayAudio" class="btn-neobrutal-audio hidden" aria-label="Tap to enable sound">
-              <i data-lucide="volume-2" style="width: 18px; height: 18px; stroke-width: 2.5;"></i>
-              <span>ENABLE AUDIO</span>
-            </button>
+            <div class="autoplay-card">
+              <div class="autoplay-icon-wrap">
+                <i data-lucide="monitor-play" style="width:28px;height:28px;stroke-width:2.5;"></i>
+              </div>
+              <div class="autoplay-text">
+                <p class="autoplay-title">SCREEN SHARE</p>
+                <p class="autoplay-sub">Tap below to start watching the live presentation</p>
+              </div>
+              <button id="btnTapToPlayScreen" class="btn-neobrutal-play" aria-label="Tap to view presentation">
+                <i data-lucide="play" style="width:20px;height:20px;stroke-width:3;"></i>
+                <span>WATCH NOW</span>
+              </button>
+              <button id="btnTapToPlayAudio" class="btn-neobrutal-audio hidden" aria-label="Tap to enable sound">
+                <i data-lucide="volume-2" style="width:17px;height:17px;stroke-width:2.5;"></i>
+                <span>UNMUTE AUDIO</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>

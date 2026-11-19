@@ -2,12 +2,16 @@
 
 > **A real-time, peer-to-peer video meeting platform built with modern Neo-Brutalist design, WebRTC, and FastAPI + python-socketio.**
 
+[![Live Demo](https://img.shields.io/badge/Demo-meet--ioo.vercel.app-C8FF00?style=flat-square&logo=vercel&logoColor=black)](https://meet-ioo.vercel.app)
 [![Python Version](https://img.shields.io/badge/python-3.14%2B-blue.svg?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115%2B-009688.svg?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Socket.IO](https://img.shields.io/badge/Socket.IO-ASGI-black.svg?style=flat-square&logo=socketdotio&logoColor=white)](https://python-socketio.readthedocs.io/)
 [![WebRTC](https://img.shields.io/badge/WebRTC-P2P%20Mesh-blue.svg?style=flat-square&logo=webrtc&logoColor=white)](https://webrtc.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 [![Design](https://img.shields.io/badge/Style-Neo--Brutalism-purple.svg?style=flat-square)](#-neo-brutalist-design-tokens)
+
+🔗 **Live Application:** [https://meet-ioo.vercel.app](https://meet-ioo.vercel.app)  
+📡 **Signaling Backend:** [https://meet-io-aq20.onrender.com](https://meet-io-aq20.onrender.com)
 
 ---
 
@@ -82,8 +86,8 @@ meet/
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/meet-io.git
-   cd meet-io
+   git clone https://github.com/yashk40/Meet.io.git
+   cd Meet.io
    ```
 
 2. **Set up a Python virtual environment (recommended):**
@@ -165,7 +169,7 @@ For self-hosting on DigitalOcean, AWS EC2, or Hetzner:
 1. **Install dependencies and clone repo:**
    ```bash
    sudo apt update && sudo apt install -y python3-pip python3-venv nginx
-   git clone https://github.com/your-username/meet-io.git /var/www/meet-io
+   git clone https://github.com/yashk40/Meet.io.git /var/www/meet-io
    cd /var/www/meet-io
    python3 -m venv venv
    source venv/bin/activate

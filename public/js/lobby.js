@@ -202,7 +202,7 @@ function highlightStartServerPrompt() {
   } else if (btnServerStatus?.classList.contains('status-checking')) {
     showLobbyToast('🔍 Checking server status... please wait a moment.', 3000);
   } else {
-    showLobbyToast('⚠️ Pehle upar se "Start Server" karo! (Render backend sleep mode me hai)', 5000);
+    showLobbyToast('⚠️ Please click "Start Server" above first! (Render backend is in sleep mode)', 5000);
   }
 }
 

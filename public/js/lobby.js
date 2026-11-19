@@ -179,6 +179,8 @@ btnNewMeeting?.addEventListener('click', async () => {
     }
 
     if (!newRoomId) {
+      // Trigger background server wake-up if Render was asleep
+      startServer(true);
       // Robust client-side fallback if network or proxy is down
       const chars = 'abcdefghijklmnopqrstuvwxyz';
       const seg = n => Array.from({ length: n }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
@@ -217,5 +219,130 @@ function cleanupLobby() {
   if (localStream) localStream.getTracks().forEach(t => t.stop());
 }
 
-// Start pre-call camera
-window.addEventListener('DOMContentLoaded', initLobbyMedia);
+// Server Status & Wakeup Manager (Render Free Tier Helper)
+const btnServerStatus = document.getElementById('btnServerStatus');
+const serverStatusText = document.getElementById('serverStatusText');
+let isServerWakingUp = false;
+let serverWakeInterval = null;
+
+function showLobbyToast(msg, duration = 3500) {
+  const container = document.getElementById('lobbyToastContainer');
+  if (!container) return;
+  const toast = document.createElement('div');
+  toast.className = 'lobby-toast';
+  toast.textContent = msg;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(10px)';
+    toast.style.transition = 'all 0.25s ease';
+    setTimeout(() => toast.remove(), 250);
+  }, duration);
+}
+
+function setServerStatus(status, text = '') {
+  if (!btnServerStatus || !serverStatusText) return;
+  btnServerStatus.classList.remove('status-checking', 'status-stopped', 'status-starting', 'status-running');
+
+  if (status === 'running') {
+    btnServerStatus.classList.add('status-running');
+    serverStatusText.textContent = text || 'Running';
+    btnServerStatus.title = 'Render backend is active & ready!';
+  } else if (status === 'starting') {
+    btnServerStatus.classList.add('status-starting');
+    serverStatusText.textContent = text || 'Starting...';
+    btnServerStatus.title = 'Waking up Render backend from sleep mode...';
+  } else if (status === 'stopped') {
+    btnServerStatus.classList.add('status-stopped');
+    serverStatusText.textContent = text || 'Start Server';
+    btnServerStatus.title = 'Server is sleeping (Render free tier). Click to wake up!';
+  } else {
+    btnServerStatus.classList.add('status-checking');
+    serverStatusText.textContent = text || 'Checking...';
+    btnServerStatus.title = 'Checking server health...';
+  }
+}
+
+async function pingBackend(timeoutMs = 4000) {
+  const backendUrl = (window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1') || window.location.hostname.includes('onrender.com'))
+    ? ''
+    : 'https://meet-io-aq20.onrender.com';
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(`${backendUrl}/api/health`, {
+      method: 'GET',
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+    return res.ok;
+  } catch (e) {
+    clearTimeout(timeoutId);
+    return false;
+  }
+}
+
+async function checkInitialServerStatus() {
+  setServerStatus('checking', 'Checking...');
+  const isHealthy = await pingBackend(3500);
+  if (isHealthy) {
+    setServerStatus('running', 'Running');
+  } else {
+    setServerStatus('stopped', 'Start Server');
+  }
+}
+
+async function startServer(silent = false) {
+  if (isServerWakingUp) return;
+  isServerWakingUp = true;
+  setServerStatus('starting', 'Starting...');
+  if (!silent) {
+    showLobbyToast('⚡ Waking up Render backend... (takes ~30-45s on free tier)', 5000);
+  }
+
+  const backendUrl = (window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1') || window.location.hostname.includes('onrender.com'))
+    ? ''
+    : 'https://meet-io-aq20.onrender.com';
+
+  // Initial trigger request (kicks Render instance to start booting)
+  fetch(`${backendUrl}/api/health`).catch(() => {});
+
+  let attempts = 0;
+  const maxAttempts = 35; // 35 * 2.5s ≈ 85 seconds
+
+  if (serverWakeInterval) clearInterval(serverWakeInterval);
+  serverWakeInterval = setInterval(async () => {
+    attempts++;
+    const isOnline = await pingBackend(3000);
+    if (isOnline) {
+      clearInterval(serverWakeInterval);
+      serverWakeInterval = null;
+      isServerWakingUp = false;
+      setServerStatus('running', 'Running');
+      showLobbyToast('🚀 Server is online and ready for calls!', 4500);
+    } else if (attempts >= maxAttempts) {
+      clearInterval(serverWakeInterval);
+      serverWakeInterval = null;
+      isServerWakingUp = false;
+      setServerStatus('stopped', 'Start Server');
+      showLobbyToast('⚠️ Server wakeup timed out. Please click Start Server again.', 4000);
+    }
+  }, 2500);
+}
+
+btnServerStatus?.addEventListener('click', () => {
+  if (btnServerStatus.classList.contains('status-running')) {
+    showLobbyToast('✅ Server is active & ready!', 2500);
+  } else if (btnServerStatus.classList.contains('status-starting')) {
+    showLobbyToast('⏳ Server is already waking up, please wait a few seconds...', 2500);
+  } else {
+    startServer();
+  }
+});
+
+// Start pre-call camera and server check
+window.addEventListener('DOMContentLoaded', () => {
+  initLobbyMedia();
+  checkInitialServerStatus();
+});

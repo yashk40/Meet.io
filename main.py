@@ -297,6 +297,12 @@ def generate_room_code() -> str:
     return f"{seg(3)}-{seg(4)}-{seg(3)}"
 
 
+@app.get("/health")
+@app.get("/api/health")
+async def health_check():
+    return {"status": "ok", "service": "meet.io", "time": time.time()}
+
+
 @app.get("/api/new-room")
 async def api_new_room():
     return {"roomId": generate_room_code()}

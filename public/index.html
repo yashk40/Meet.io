@@ -69,7 +69,10 @@
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
         </svg>
       </button>
-      <a href="#joinFlow" class="btn-signin">Sign In</a>
+      <button id="btnServerStatus" class="btn-server-status status-checking" type="button" aria-label="Server status" title="Checking server status...">
+        <span class="server-status-dot"></span>
+        <span id="serverStatusText">Checking...</span>
+      </button>
     </div>
   </header>
 
@@ -298,6 +301,7 @@
 
     </div>
   </main>
+  <div id="lobbyToastContainer" class="lobby-toast-container"></div>
   <script src="/js/lobby.js"></script>
 </body>
 </html>

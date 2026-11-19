@@ -283,6 +283,147 @@ svg.lucide, .lucide {
   box-shadow: 1px 1px 0px #000000;
 }
 
+/* Neo-Brutalist Server Status & Wakeup Button */
+.btn-server-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 2px solid #000000;
+  box-shadow: 2.5px 2.5px 0px #000000;
+  border-radius: 12px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #000000;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.btn-server-status:hover {
+  transform: translate(1.5px, 1.5px);
+  box-shadow: 1px 1px 0px #000000;
+}
+
+.btn-server-status:active {
+  transform: translate(2.5px, 2.5px);
+  box-shadow: 0px 0px 0px #000000;
+}
+
+.server-status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid #000000;
+  flex-shrink: 0;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* State: Checking */
+.btn-server-status.status-checking {
+  background: #E2E8F0;
+  color: #475569;
+}
+.btn-server-status.status-checking .server-status-dot {
+  background: #94A3B8;
+  animation: pulseDotSlow 1.5s infinite alternate;
+}
+
+/* State: Stopped / Sleeping (Start Server) */
+.btn-server-status.status-stopped {
+  background: #FFE600;
+  color: #000000;
+}
+.btn-server-status.status-stopped:hover {
+  background: #FFD000;
+}
+.btn-server-status.status-stopped .server-status-dot {
+  background: #FF4D4D;
+  box-shadow: 0 0 6px rgba(255, 77, 77, 0.8);
+}
+
+/* State: Starting / Waking Up */
+.btn-server-status.status-starting {
+  background: #FFB800;
+  color: #000000;
+  cursor: wait;
+}
+.btn-server-status.status-starting .server-status-dot {
+  background: #FFFFFF;
+  animation: pulseStartingDot 0.8s infinite alternate ease-in-out;
+}
+
+/* State: Running (Live) */
+.btn-server-status.status-running {
+  background: #C8FF00;
+  color: #000000;
+}
+.btn-server-status.status-running:hover {
+  background: #D4FF20;
+}
+.btn-server-status.status-running .server-status-dot {
+  background: #10B981;
+  box-shadow: 0 0 8px #10B981;
+  animation: liveServerDot 2s infinite ease-in-out;
+}
+
+@keyframes pulseStartingDot {
+  0% { transform: scale(0.85); opacity: 0.6; }
+  100% { transform: scale(1.25); opacity: 1; }
+}
+
+@keyframes liveServerDot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.35); opacity: 0.8; }
+}
+
+@keyframes pulseDotSlow {
+  0% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+/* Lobby Toast Notifications */
+.lobby-toast-container {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+  max-width: 90vw;
+}
+
+.lobby-toast {
+  pointer-events: auto;
+  background: #000000;
+  color: #FFFFFF;
+  border: 2px solid #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 4px 6px 0 0 #A78BFA, 4px 6px 0 2px #000000;
+  padding: 10px 20px;
+  font-size: 0.88rem;
+  font-weight: 800;
+  text-align: center;
+  white-space: normal;
+  word-break: break-word;
+  animation: lobbyToastIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes lobbyToastIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 /* Main Hero Area */
 .lobby-main {
   position: relative;
@@ -931,9 +1072,10 @@ svg.lucide, .lucide {
     width: 17px;
     height: 17px;
   }
-  .btn-signin {
-    padding: 7px 15px;
-    font-size: 0.88rem;
+  .btn-signin,
+  .btn-server-status {
+    padding: 6px 13px;
+    font-size: 0.82rem;
   }
 
   .lobby-main {

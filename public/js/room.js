@@ -865,12 +865,28 @@ socket.on('signal', async ({ from, fromUser, signal }) => {
 socket.on('user-left', ({ socketId, userName: leftUserName }) => {
   console.log(`[WEBRTC] ${leftUserName} left`);
   showToast(`${leftUserName} left the meeting`);
+
+  // Save peerData BEFORE deleting so we can check isSharingScreen
+  const leavingPeer = peers.get(socketId);
+  const wasPresenting = leavingPeer?.user?.isSharingScreen;
+
   removeRemoteTile(socketId);
   if (peers.has(socketId)) {
     const { pc } = peers.get(socketId);
     pc.close();
     peers.delete(socketId);
   }
+
+  // If the leaving user was presenting, tear down the stage
+  if (wasPresenting || pinnedTarget === 'presentation') {
+    presentationArea.classList.add('hidden');
+    presentationVideo.srcObject = null;
+    screenAutoplayOverlay?.classList.add('hidden');
+    screenShareBanner?.classList.add('hidden');
+    stageContainer.classList.remove('sharing-active');
+    if (pinnedTarget === 'presentation') unpinCurrent();
+  }
+
   if (pinnedTarget === socketId) {
     unpinCurrent();
   }

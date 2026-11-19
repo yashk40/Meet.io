@@ -160,8 +160,59 @@ function extractRoomId(raw) {
   return val.replace(/[^a-zA-Z0-9-]/g, '');
 }
 
+// Server Status & Wakeup Manager (Render Free Tier Helper)
+const btnServerStatus = document.getElementById('btnServerStatus');
+const serverStatusText = document.getElementById('serverStatusText');
+let isServerOnline = false;
+let isServerWakingUp = false;
+let serverWakeInterval = null;
+
+function showLobbyToast(msg, duration = 3500) {
+  const container = document.getElementById('lobbyToastContainer');
+  if (!container) return;
+  const toast = document.createElement('div');
+  toast.className = 'lobby-toast';
+  toast.textContent = msg;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(10px)';
+    toast.style.transition = 'all 0.25s ease';
+    setTimeout(() => toast.remove(), 250);
+  }, duration);
+}
+
+function highlightStartServerPrompt() {
+  // Smooth scroll to top header so user immediately sees the button
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Add attention shake/bounce animation to the Start Server button
+  if (btnServerStatus) {
+    btnServerStatus.classList.remove('attention');
+    void btnServerStatus.offsetWidth; // Force CSS reflow
+    btnServerStatus.classList.add('attention');
+    setTimeout(() => {
+      btnServerStatus.classList.remove('attention');
+    }, 2800);
+  }
+
+  // Toast message
+  if (btnServerStatus?.classList.contains('status-starting')) {
+    showLobbyToast('⏳ Server wake-up in progress! Please wait until it shows "● Running" before joining.', 4500);
+  } else if (btnServerStatus?.classList.contains('status-checking')) {
+    showLobbyToast('🔍 Checking server status... please wait a moment.', 3000);
+  } else {
+    showLobbyToast('⚠️ Pehle upar se "Start Server" karo! (Render backend sleep mode me hai)', 5000);
+  }
+}
+
 // Start New Meeting
 btnNewMeeting?.addEventListener('click', async () => {
+  if (!isServerOnline) {
+    highlightStartServerPrompt();
+    return;
+  }
+
   try {
     saveUserName();
     const backendUrl = (window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1') || window.location.hostname.includes('onrender.com'))
@@ -179,9 +230,6 @@ btnNewMeeting?.addEventListener('click', async () => {
     }
 
     if (!newRoomId) {
-      // Trigger background server wake-up if Render was asleep
-      startServer(true);
-      // Robust client-side fallback if network or proxy is down
       const chars = 'abcdefghijklmnopqrstuvwxyz';
       const seg = n => Array.from({ length: n }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
       newRoomId = `${seg(3)}-${seg(4)}-${seg(3)}`;
@@ -196,6 +244,11 @@ btnNewMeeting?.addEventListener('click', async () => {
 
 // Join Existing Meeting
 btnJoin?.addEventListener('click', () => {
+  if (!isServerOnline) {
+    highlightStartServerPrompt();
+    return;
+  }
+
   const code = extractRoomId(roomCodeInput.value);
   if (code) {
     saveUserName();
@@ -219,44 +272,27 @@ function cleanupLobby() {
   if (localStream) localStream.getTracks().forEach(t => t.stop());
 }
 
-// Server Status & Wakeup Manager (Render Free Tier Helper)
-const btnServerStatus = document.getElementById('btnServerStatus');
-const serverStatusText = document.getElementById('serverStatusText');
-let isServerWakingUp = false;
-let serverWakeInterval = null;
-
-function showLobbyToast(msg, duration = 3500) {
-  const container = document.getElementById('lobbyToastContainer');
-  if (!container) return;
-  const toast = document.createElement('div');
-  toast.className = 'lobby-toast';
-  toast.textContent = msg;
-  container.appendChild(toast);
-  setTimeout(() => {
-    toast.style.opacity = '0';
-    toast.style.transform = 'translateY(10px)';
-    toast.style.transition = 'all 0.25s ease';
-    setTimeout(() => toast.remove(), 250);
-  }, duration);
-}
-
 function setServerStatus(status, text = '') {
   if (!btnServerStatus || !serverStatusText) return;
   btnServerStatus.classList.remove('status-checking', 'status-stopped', 'status-starting', 'status-running');
 
   if (status === 'running') {
+    isServerOnline = true;
     btnServerStatus.classList.add('status-running');
     serverStatusText.textContent = text || 'Running';
     btnServerStatus.title = 'Render backend is active & ready!';
   } else if (status === 'starting') {
+    isServerOnline = false;
     btnServerStatus.classList.add('status-starting');
     serverStatusText.textContent = text || 'Starting...';
     btnServerStatus.title = 'Waking up Render backend from sleep mode...';
   } else if (status === 'stopped') {
+    isServerOnline = false;
     btnServerStatus.classList.add('status-stopped');
     serverStatusText.textContent = text || 'Start Server';
     btnServerStatus.title = 'Server is sleeping (Render free tier). Click to wake up!';
   } else {
+    isServerOnline = false;
     btnServerStatus.classList.add('status-checking');
     serverStatusText.textContent = text || 'Checking...';
     btnServerStatus.title = 'Checking server health...';
